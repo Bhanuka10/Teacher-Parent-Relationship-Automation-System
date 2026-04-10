@@ -13,8 +13,8 @@ use App\Http\Controllers\Parent\ProfileController;
 
 // Guest routes
 Route::middleware('guest')->group(function () {
-    Route::get('/',       [LoginController::class, 'showLogin'])->name('login');
-    Route::get('/login',  [LoginController::class, 'showLogin']);
+    Route::redirect('/', '/login');
+    Route::get('/login',  [LoginController::class, 'showLogin'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
 });
 

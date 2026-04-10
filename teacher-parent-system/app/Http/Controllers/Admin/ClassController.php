@@ -3,67 +3,46 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\CreateUserRequest;
+use App\Http\Requests\Admin\StoreClassRequest;
+use App\Http\Requests\Admin\UpdateClassRequest;
+use App\Models\SchoolClass;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
-class UserController extends Controller
+class ClassController extends Controller
 {
     public function index()
     {
-        $users = User::whereIn('role', ['teacher', 'parent'])
-            ->orderBy('role')->orderBy('name')->get();
-        return view('admin.users.index', compact('users'));
+        $classes = SchoolClass::with(['teacher', 'students'])->orderBy('name')->get();
+        return view('admin.classes.index', compact('classes'));
     }
 
     public function create()
     {
-        return view('admin.users.create');
+        $teachers = User::where('role', 'teacher')->orderBy('name')->get();
+        return view('admin.classes.create', compact('teachers'));
     }
 
-    public function store(CreateUserRequest $request)
+    public function store(StoreClassRequest $request)
     {
-        User::create([
-            'name'                 => $request->name,
-            'email'                => $request->email,
-            'role'                 => $request->role,
-            'password'             => Hash::make($request->password),
-            'must_change_password' => true,
-        ]);
-        return redirect()->route('admin.users.index')
-            ->with('success', ucfirst($request->role).' account created.');
+        SchoolClass::create($request->validated());
+        return redirect()->route('admin.classes.index')->with('success', 'Class created.');
     }
 
-    public function edit(User $user)
+    public function edit(SchoolClass $school_class)
     {
-        return view('admin.users.edit', compact('user'));
+        $teachers = User::where('role', 'teacher')->orderBy('name')->get();
+        return view('admin.classes.edit', compact('school_class', 'teachers'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(UpdateClassRequest $request, SchoolClass $school_class)
     {
-        $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'email', 'unique:users,email,'.$user->id],
-            'password' => ['nullable', 'string', 'min:6', 'confirmed'],
-        ]);
-
-        $user->name  = $request->name;
-        $user->email = $request->email;
-
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
-            $user->must_change_password = true;
-        }
-        $user->save();
-
-        return redirect()->route('admin.users.index')
-            ->with('success', 'User updated.');
+        $school_class->update($request->validated());
+        return redirect()->route('admin.classes.index')->with('success', 'Class updated.');
     }
 
-    public function destroy(User $user)
+    public function destroy(SchoolClass $school_class)
     {
-        $user->delete();
-        return redirect()->route('admin.users.index')->with('success', 'User deleted.');
+        $school_class->delete();
+        return redirect()->route('admin.classes.index')->with('success', 'Class deleted.');
     }
 }
