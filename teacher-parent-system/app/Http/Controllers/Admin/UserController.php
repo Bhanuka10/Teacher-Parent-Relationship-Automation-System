@@ -10,29 +10,47 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::whereIn('role', ['teacher', 'parent'])
-            ->orderBy('role')->orderBy('name')->get();
-        return view('admin.users.index', compact('users'));
+        $role = $request->query('role');
+
+        $usersQuery = User::whereIn('role', ['teacher', 'parent']);
+
+        if (in_array($role, ['teacher', 'parent'], true)) {
+            $usersQuery->where('role', $role);
+        } else {
+            $role = null;
+        }
+
+        $users = $usersQuery->orderBy('name')->get();
+
+        return view('admin.users.index', compact('users', 'role'));
     }
 
     public function create()
     {
-        return view('admin.users.create');
+        $role = request()->query('role');
+        if (!in_array($role, ['teacher', 'parent'], true)) {
+            $role = null;
+        }
+
+        return view('admin.users.create', compact('role'));
     }
 
     public function store(CreateUserRequest $request)
     {
+        $role = $request->role;
+
         User::create([
             'name'                 => $request->name,
             'email'                => $request->email,
-            'role'                 => $request->role,
+            'role'                 => $role,
             'password'             => Hash::make($request->password),
             'must_change_password' => true,
         ]);
-        return redirect()->route('admin.users.index')
-            ->with('success', ucfirst($request->role).' account created.');
+
+        return redirect()->route('admin.users.index', ['role' => $role])
+            ->with('success', ucfirst($role).' account created.');
     }
 
     public function edit(User $user)
@@ -57,13 +75,14 @@ class UserController extends Controller
         }
         $user->save();
 
-        return redirect()->route('admin.users.index')
+        return redirect()->route('admin.users.index', ['role' => $user->role])
             ->with('success', 'User updated.');
     }
 
     public function destroy(User $user)
     {
+        $role = $user->role;
         $user->delete();
-        return redirect()->route('admin.users.index')->with('success', 'User deleted.');
+        return redirect()->route('admin.users.index', ['role' => $role])->with('success', 'User deleted.');
     }
 }

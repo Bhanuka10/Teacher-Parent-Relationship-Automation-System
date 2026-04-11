@@ -21,10 +21,15 @@
                       {{ request()->routeIs('admin.dashboard') ? 'bg-purple-600 text-white' : 'text-purple-200 hover:bg-purple-700' }}">
                 Dashboard
             </a>
-            <a href="{{ route('admin.users.index') }}"
+            <a href="{{ route('admin.users.index', ['role' => 'teacher']) }}"
                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm
-                      {{ request()->routeIs('admin.users.*') ? 'bg-purple-600 text-white' : 'text-purple-200 hover:bg-purple-700' }}">
-                Manage Users
+                      {{ request()->routeIs('admin.users.*') && request('role') !== 'parent' ? 'bg-purple-600 text-white' : 'text-purple-200 hover:bg-purple-700' }}">
+                Teachers
+            </a>
+            <a href="{{ route('admin.users.index', ['role' => 'parent']) }}"
+               class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm
+                      {{ request()->routeIs('admin.users.*') && request('role') === 'parent' ? 'bg-purple-600 text-white' : 'text-purple-200 hover:bg-purple-700' }}">
+                Parents
             </a>
         </nav>
 

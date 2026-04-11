@@ -1,12 +1,14 @@
 @extends('layouts.admin')
-@section('title', 'Manage Users')
+@section('title', $role === 'parent' ? 'Manage Parents' : 'Manage Teachers')
 @section('content')
 
 <div class="flex items-center justify-between mb-6">
-    <h1 class="text-2xl font-bold text-gray-800">Manage Users</h1>
-    <a href="{{ route('admin.users.create') }}"
+    <h1 class="text-2xl font-bold text-gray-800">
+        {{ $role === 'parent' ? 'Manage Parents' : 'Manage Teachers' }}
+    </h1>
+    <a href="{{ route('admin.users.create', ['role' => $role === 'parent' ? 'parent' : 'teacher']) }}"
        class="bg-purple-700 hover:bg-purple-800 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
-        + New Account
+        + New {{ $role === 'parent' ? 'Parent' : 'Teacher' }}
     </a>
 </div>
 

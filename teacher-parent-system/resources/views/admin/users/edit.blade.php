@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="max-w-lg">
-    <a href="{{ route('admin.users.index') }}" class="text-sm text-purple-600 hover:underline mb-6 inline-block">
+    <a href="{{ route('admin.users.index', ['role' => $user->role]) }}" class="text-sm text-purple-600 hover:underline mb-6 inline-block">
         &larr; Back to users
     </a>
 
