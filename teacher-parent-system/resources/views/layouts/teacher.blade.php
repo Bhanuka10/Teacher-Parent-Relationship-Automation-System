@@ -25,7 +25,16 @@
                       {{ request()->routeIs('teacher.profile*') ? 'bg-teal-500 text-white' : 'text-teal-100 hover:bg-teal-600' }}">
                 My Profile
             </a>
-            {{-- Attendance, Marks, Messages will be added in future phases --}}
+            <a href="{{ route('teacher.attendance.index') }}"
+               class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm
+                      {{ request()->routeIs('teacher.attendance.index') ? 'bg-teal-500 text-white' : 'text-teal-100 hover:bg-teal-600' }}">
+                Mark Attendance
+            </a>
+            <a href="{{ route('teacher.attendance.history') }}"
+               class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm
+                      {{ request()->routeIs('teacher.attendance.history') ? 'bg-teal-500 text-white' : 'text-teal-100 hover:bg-teal-600' }}">
+                Attendance History
+            </a>
         </nav>
 
         <div class="px-4 py-4 border-t border-teal-600">

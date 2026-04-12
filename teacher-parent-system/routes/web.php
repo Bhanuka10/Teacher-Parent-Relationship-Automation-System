@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ClassController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDash;
+use App\Http\Controllers\Teacher\AttendanceController as TeacherAttendance;
 use App\Http\Controllers\Teacher\ProfileController as TeacherProfile;
 use App\Http\Controllers\Parent\DashboardController as ParentDash;
 use App\Http\Controllers\Parent\ProfileController;
@@ -49,6 +50,9 @@ Route::middleware(['auth', 'teacher'])
     ->name('teacher.')
     ->group(function () {
         Route::get('/dashboard', [TeacherDash::class, 'index'])->name('dashboard');
+        Route::get('/attendance', [TeacherAttendance::class, 'index'])->name('attendance.index');
+        Route::post('/attendance', [TeacherAttendance::class, 'store'])->name('attendance.store');
+        Route::get('/attendance/history', [TeacherAttendance::class, 'history'])->name('attendance.history');
         Route::get('/profile', [TeacherProfile::class, 'show'])->name('profile');
         Route::put('/profile', [TeacherProfile::class, 'update'])->name('profile.update');
     });
