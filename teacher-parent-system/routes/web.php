@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDash;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ClassController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\AttendanceController as AdminAttendance;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDash;
 use App\Http\Controllers\Teacher\AttendanceController as TeacherAttendance;
 use App\Http\Controllers\Teacher\ProfileController as TeacherProfile;
@@ -36,6 +37,7 @@ Route::middleware(['auth', 'admin'])
     ->name('admin.')
     ->group(function () {
         Route::get('/dashboard', [AdminDash::class, 'index'])->name('dashboard');
+        Route::get('/attendance/history', [AdminAttendance::class, 'history'])->name('attendance.history');
         Route::resource('users',    UserController::class);
         Route::patch('classes/{school_class}/remove-teacher', [ClassController::class, 'removeTeacher'])->name('classes.remove-teacher');
         Route::patch('classes/{school_class}/reset', [ClassController::class, 'resetClass'])->name('classes.reset');
