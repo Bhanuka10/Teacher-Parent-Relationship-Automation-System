@@ -28,4 +28,9 @@ class Student extends Model
     {
         return $this->belongsTo(User::class, 'parent_id');
     }
+
+    public function profile()
+    {
+        return $this->hasOne(StudentProfile::class, 'admission_number', 'admission_number');
+    }
 }

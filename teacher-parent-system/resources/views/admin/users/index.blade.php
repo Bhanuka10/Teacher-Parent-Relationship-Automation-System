@@ -37,13 +37,27 @@
     </form>
 </div>
 
-<div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-    <table class="w-full text-sm">
+<div class="bg-white rounded-xl border border-gray-200 overflow-x-auto">
+    <table class="{{ $role === 'teacher' ? 'min-w-[1400px]' : 'min-w-[1700px]' }} w-full text-sm">
         <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
             <tr>
                 <th class="text-left px-5 py-3">Name</th>
                 <th class="text-left px-5 py-3">Email</th>
-                <th class="text-left px-5 py-3">Admission No.</th>
+                @if($role === 'teacher')
+                    <th class="text-left px-5 py-3">Full Name</th>
+                    <th class="text-left px-5 py-3">Address</th>
+                    <th class="text-left px-5 py-3">Phone Number</th>
+                    <th class="text-left px-5 py-3">Email Address</th>
+                @else
+                    <th class="text-left px-5 py-3">Admission No.</th>
+                    <th class="text-left px-5 py-3">Full Name</th>
+                    <th class="text-left px-5 py-3">Index No.</th>
+                    <th class="text-left px-5 py-3">Date of Birth</th>
+                    <th class="text-left px-5 py-3">Gender</th>
+                    <th class="text-left px-5 py-3">Parent Phone</th>
+                    <th class="text-left px-5 py-3">Parent Email</th>
+                    <th class="text-left px-5 py-3">Address</th>
+                @endif
                 <th class="text-left px-5 py-3">Class</th>
                 <th class="text-left px-5 py-3">Role</th>
                 <th class="text-left px-5 py-3">Status</th>
@@ -53,7 +67,9 @@
         <tbody class="divide-y divide-gray-100">
             @forelse($users as $user)
             @php
+                $teacherProfile = $user->role === 'teacher' ? $user->teacherProfile : null;
                 $studentRecord = $user->role === 'parent' ? $user->students->first() : null;
+                $studentProfile = $studentRecord?->profile;
                 $admissionNumber = $studentRecord?->admission_number ?? '-';
                 $className = $user->role === 'teacher'
                     ? ($user->schoolClass?->name ?? '-')
@@ -62,7 +78,21 @@
             <tr class="hover:bg-gray-50">
                 <td class="px-5 py-3 font-medium text-gray-800">{{ $user->name }}</td>
                 <td class="px-5 py-3 text-gray-600">{{ $user->email }}</td>
-                <td class="px-5 py-3 text-gray-600">{{ $admissionNumber }}</td>
+                @if($role === 'teacher')
+                    <td class="px-5 py-3 text-gray-600">{{ $teacherProfile?->full_name ?? '-' }}</td>
+                    <td class="px-5 py-3 text-gray-600 max-w-xs truncate" title="{{ $teacherProfile?->address }}">{{ $teacherProfile?->address ?? '-' }}</td>
+                    <td class="px-5 py-3 text-gray-600">{{ $teacherProfile?->phone_number ?? '-' }}</td>
+                    <td class="px-5 py-3 text-gray-600">{{ $teacherProfile?->email_address ?? '-' }}</td>
+                @else
+                    <td class="px-5 py-3 text-gray-600">{{ $admissionNumber }}</td>
+                    <td class="px-5 py-3 text-gray-600">{{ $studentProfile?->full_name ?? '-' }}</td>
+                    <td class="px-5 py-3 text-gray-600">{{ $studentProfile?->index_number ?? '-' }}</td>
+                    <td class="px-5 py-3 text-gray-600">{{ optional($studentProfile?->date_of_birth)->format('Y-m-d') ?? '-' }}</td>
+                    <td class="px-5 py-3 text-gray-600">{{ $studentProfile?->gender ? ucfirst($studentProfile->gender) : '-' }}</td>
+                    <td class="px-5 py-3 text-gray-600">{{ $studentProfile?->parent_phone_number ?? '-' }}</td>
+                    <td class="px-5 py-3 text-gray-600">{{ $studentProfile?->parent_email ?? '-' }}</td>
+                    <td class="px-5 py-3 text-gray-600 max-w-xs truncate" title="{{ $studentProfile?->address }}">{{ $studentProfile?->address ?? '-' }}</td>
+                @endif
                 <td class="px-5 py-3 text-gray-600">{{ $className }}</td>
                 <td class="px-5 py-3">
                     <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium
@@ -94,7 +124,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="7" class="px-5 py-8 text-center text-gray-400 text-sm">
+                <td colspan="{{ $role === 'teacher' ? '10' : '14' }}" class="px-5 py-8 text-center text-gray-400 text-sm">
                     No users found. Create one to get started.
                 </td>
             </tr>

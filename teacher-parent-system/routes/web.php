@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ClassController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDash;
+use App\Http\Controllers\Teacher\ProfileController as TeacherProfile;
 use App\Http\Controllers\Parent\DashboardController as ParentDash;
 use App\Http\Controllers\Parent\ProfileController;
 
@@ -48,6 +49,8 @@ Route::middleware(['auth', 'teacher'])
     ->name('teacher.')
     ->group(function () {
         Route::get('/dashboard', [TeacherDash::class, 'index'])->name('dashboard');
+        Route::get('/profile', [TeacherProfile::class, 'show'])->name('profile');
+        Route::put('/profile', [TeacherProfile::class, 'update'])->name('profile.update');
     });
 
 // Parent routes
@@ -57,5 +60,6 @@ Route::middleware(['auth', 'parent'])
     ->group(function () {
         Route::get('/dashboard',        [ParentDash::class, 'index'])->name('dashboard');
         Route::get('/profile',          [ProfileController::class, 'show'])->name('profile');
+        Route::put('/profile/student',  [ProfileController::class, 'updateStudentProfile'])->name('profile.student');
         Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
     });

@@ -20,6 +20,11 @@
                       {{ request()->routeIs('teacher.dashboard') ? 'bg-teal-500 text-white' : 'text-teal-100 hover:bg-teal-600' }}">
                 Dashboard
             </a>
+            <a href="{{ route('teacher.profile') }}"
+               class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm
+                      {{ request()->routeIs('teacher.profile*') ? 'bg-teal-500 text-white' : 'text-teal-100 hover:bg-teal-600' }}">
+                My Profile
+            </a>
             {{-- Attendance, Marks, Messages will be added in future phases --}}
         </nav>
 

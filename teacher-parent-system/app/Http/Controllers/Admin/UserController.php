@@ -26,13 +26,13 @@ class UserController extends Controller
         }
 
         if ($role === 'teacher') {
-            $usersQuery->with('schoolClass');
+            $usersQuery->with(['schoolClass', 'teacherProfile']);
         } elseif ($role === 'parent') {
             $usersQuery->with(['students' => function ($query) {
-                $query->with('schoolClass')->orderBy('id');
+                $query->with(['schoolClass', 'profile'])->orderBy('id');
             }]);
         } else {
-            $usersQuery->with(['schoolClass', 'students.schoolClass']);
+            $usersQuery->with(['schoolClass', 'teacherProfile', 'students.schoolClass', 'students.profile']);
         }
 
         if ($search !== '') {
@@ -43,11 +43,20 @@ class UserController extends Controller
                 if ($role === 'teacher') {
                     $query->orWhereHas('schoolClass', function ($classQuery) use ($search) {
                         $classQuery->where('name', 'like', '%'.$search.'%');
+                    })->orWhereHas('teacherProfile', function ($profileQuery) use ($search) {
+                        $profileQuery->where('full_name', 'like', '%'.$search.'%')
+                            ->orWhere('phone_number', 'like', '%'.$search.'%')
+                            ->orWhere('email_address', 'like', '%'.$search.'%')
+                            ->orWhere('address', 'like', '%'.$search.'%');
                     });
                 } elseif ($role === 'parent') {
                     $query->orWhereHas('students', function ($studentQuery) use ($search) {
                         $studentQuery->where('admission_number', 'like', '%'.$search.'%')
                             ->orWhere('name', 'like', '%'.$search.'%')
+                            ->orWhereHas('profile', function ($profileQuery) use ($search) {
+                                $profileQuery->where('index_number', 'like', '%'.$search.'%')
+                                    ->orWhere('full_name', 'like', '%'.$search.'%');
+                            })
                             ->orWhereHas('schoolClass', function ($classQuery) use ($search) {
                                 $classQuery->where('name', 'like', '%'.$search.'%');
                             });
@@ -58,6 +67,10 @@ class UserController extends Controller
                     })->orWhereHas('students', function ($studentQuery) use ($search) {
                         $studentQuery->where('admission_number', 'like', '%'.$search.'%')
                             ->orWhere('name', 'like', '%'.$search.'%')
+                            ->orWhereHas('profile', function ($profileQuery) use ($search) {
+                                $profileQuery->where('index_number', 'like', '%'.$search.'%')
+                                    ->orWhere('full_name', 'like', '%'.$search.'%');
+                            })
                             ->orWhereHas('schoolClass', function ($classQuery) use ($search) {
                                 $classQuery->where('name', 'like', '%'.$search.'%');
                             });
