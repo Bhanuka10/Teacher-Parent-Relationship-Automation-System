@@ -27,7 +27,7 @@
                 <button type="button" data-tab-target="parent"
                     class="tab-btn px-4 py-2 text-sm font-medium rounded-md transition"
                     aria-pressed="{{ $activeTab === 'parent' ? 'true' : 'false' }}">
-                    Parent
+                    Student
                 </button>
             </div>
         </div>
@@ -138,7 +138,7 @@
 
             <button type="submit"
                 class="w-full bg-purple-700 hover:bg-purple-800 text-white py-2.5 rounded-lg font-medium text-sm transition">
-                Create Parent Account
+                Create Student Account
             </button>
         </form>
     </div>

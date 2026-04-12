@@ -1,14 +1,14 @@
 @extends('layouts.admin')
-@section('title', $role === 'parent' ? 'Manage Parents' : 'Manage Teachers')
+@section('title', $role === 'parent' ? 'Manage Students' : 'Manage Teachers')
 @section('content')
 
 <div class="flex items-center justify-between mb-6">
     <h1 class="text-2xl font-bold text-gray-800">
-        {{ $role === 'parent' ? 'Manage Parents' : 'Manage Teachers' }}
+        {{ $role === 'parent' ? 'Manage Students' : 'Manage Teachers' }}
     </h1>
     <a href="{{ route('admin.users.create', ['role' => $role === 'parent' ? 'parent' : 'teacher']) }}"
        class="bg-purple-700 hover:bg-purple-800 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
-        + New {{ $role === 'parent' ? 'Parent' : 'Teacher' }}
+        + New {{ $role === 'parent' ? 'Student' : 'Teacher' }}
     </a>
 </div>
 
@@ -33,7 +33,7 @@
                         {{ $user->role === 'teacher'
                             ? 'bg-teal-100 text-teal-700'
                             : 'bg-orange-100 text-orange-700' }}">
-                        {{ ucfirst($user->role) }}
+                        {{ $user->role === 'parent' ? 'Student' : 'Teacher' }}
                     </span>
                 </td>
                 <td class="px-5 py-3">

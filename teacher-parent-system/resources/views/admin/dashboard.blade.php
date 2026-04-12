@@ -10,7 +10,7 @@
         <p class="text-3xl font-bold text-purple-700">{{ $stats['teachers'] }}</p>
     </div>
     <div class="bg-white rounded-xl border border-gray-200 p-5">
-        <p class="text-sm text-gray-500 mb-1">Parents</p>
+        <p class="text-sm text-gray-500 mb-1">Students</p>
         <p class="text-3xl font-bold text-purple-700">{{ $stats['parents'] }}</p>
     </div>
 </div>

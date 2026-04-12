@@ -49,8 +49,10 @@ class UserController extends Controller
             'must_change_password' => true,
         ]);
 
+        $roleLabel = $role === 'parent' ? 'Student' : ucfirst($role);
+
         return redirect()->route('admin.users.index', ['role' => $role])
-            ->with('success', ucfirst($role).' account created.');
+            ->with('success', $roleLabel.' account created.');
     }
 
     public function edit(User $user)

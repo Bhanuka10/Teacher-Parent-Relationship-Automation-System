@@ -20,7 +20,7 @@
             <div class="flex justify-between">
                 <span class="text-gray-500">Role</span>
                 <span class="inline-block bg-orange-100 text-orange-700 text-xs px-2.5 py-0.5 rounded-full font-medium">
-                    Parent
+                    Student
                 </span>
             </div>
         </div>

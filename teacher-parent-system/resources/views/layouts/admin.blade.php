@@ -29,7 +29,7 @@
             <a href="{{ route('admin.users.index', ['role' => 'parent']) }}"
                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm
                       {{ request()->routeIs('admin.users.*') && request('role') === 'parent' ? 'bg-purple-600 text-white' : 'text-purple-200 hover:bg-purple-700' }}">
-                Parents
+                Students
             </a>
         </nav>
 

@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Parent') — School System</title>
+    <title>@yield('title', 'Student') — School System</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-orange-50 flex min-h-screen">
 
     <aside class="w-64 bg-orange-700 text-white flex flex-col min-h-screen shrink-0">
         <div class="px-6 py-5 border-b border-orange-600">
-            <p class="text-xs font-semibold uppercase tracking-widest text-orange-200 mb-1">Parent Portal</p>
+            <p class="text-xs font-semibold uppercase tracking-widest text-orange-200 mb-1">Student Portal</p>
             <p class="font-semibold text-white">{{ auth()->user()->name }}</p>
         </div>
 
