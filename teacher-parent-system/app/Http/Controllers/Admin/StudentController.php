@@ -19,27 +19,51 @@ class StudentController extends Controller
 
     public function create()
     {
-        $classes = SchoolClass::orderBy('name')->get();
         $parents = User::where('role', 'parent')->orderBy('name')->get();
-        return view('admin.students.create', compact('classes', 'parents'));
+        return view('admin.students.create', compact('parents'));
     }
 
     public function store(StoreStudentRequest $request)
     {
-        Student::create($request->validated());
+        $data = $request->validated();
+
+        $className = $data['grade'].'-'.$data['section'];
+        $schoolClass = SchoolClass::firstOrCreate(['name' => $className]);
+
+        $data['school_class_id'] = $schoolClass->id;
+        unset($data['grade'], $data['section']);
+
+        Student::create($data);
+
         return redirect()->route('admin.students.index')->with('success', 'Student added.');
     }
 
     public function edit(Student $student)
     {
-        $classes = SchoolClass::orderBy('name')->get();
         $parents = User::where('role', 'parent')->orderBy('name')->get();
-        return view('admin.students.edit', compact('student', 'classes', 'parents'));
+
+        $selectedGrade = null;
+        $selectedSection = null;
+
+        if ($student->schoolClass && str_contains($student->schoolClass->name, '-')) {
+            [$selectedGrade, $selectedSection] = explode('-', $student->schoolClass->name);
+        }
+
+        return view('admin.students.edit', compact('student', 'parents', 'selectedGrade', 'selectedSection'));
     }
 
     public function update(UpdateStudentRequest $request, Student $student)
     {
-        $student->update($request->validated());
+        $data = $request->validated();
+
+        $className = $data['grade'].'-'.$data['section'];
+        $schoolClass = SchoolClass::firstOrCreate(['name' => $className]);
+
+        $data['school_class_id'] = $schoolClass->id;
+        unset($data['grade'], $data['section']);
+
+        $student->update($data);
+
         return redirect()->route('admin.students.index')->with('success', 'Student updated.');
     }
 

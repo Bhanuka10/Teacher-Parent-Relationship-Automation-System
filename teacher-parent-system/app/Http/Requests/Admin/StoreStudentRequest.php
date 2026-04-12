@@ -15,7 +15,8 @@ class StoreStudentRequest extends FormRequest
             'admission_number' => ['required', 'string', 'unique:students,admission_number'],
             'date_of_birth'    => ['nullable', 'date'],
             'gender'           => ['nullable', 'in:male,female,other'],
-            'school_class_id'  => ['nullable', 'exists:school_classes,id'],
+            'grade'            => ['required', 'integer', 'between:1,12'],
+            'section'          => ['required', 'in:A,B,C,D,E'],
             'parent_id'        => ['nullable', 'exists:users,id'],
         ];
     }

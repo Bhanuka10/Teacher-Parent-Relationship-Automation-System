@@ -58,6 +58,40 @@
                 @enderror
             </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Grade</label>
+                    <select name="grade"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                               focus:outline-none focus:ring-2 focus:ring-purple-500
+                               @error('grade') border-red-400 @enderror">
+                        <option value="">Select grade</option>
+                        @for($grade = 1; $grade <= 12; $grade++)
+                            <option value="{{ $grade }}" {{ old('grade') == $grade ? 'selected' : '' }}>{{ $grade }}</option>
+                        @endfor
+                    </select>
+                    @error('grade')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Section</label>
+                    <select name="section"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                               focus:outline-none focus:ring-2 focus:ring-purple-500
+                               @error('section') border-red-400 @enderror">
+                        <option value="">Select section</option>
+                        @foreach(['A', 'B', 'C', 'D', 'E'] as $section)
+                            <option value="{{ $section }}" {{ old('section') === $section ? 'selected' : '' }}>{{ $section }}</option>
+                        @endforeach
+                    </select>
+                    @error('section')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">
                     Temporary password
@@ -109,6 +143,40 @@
                 @error('email')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Grade</label>
+                    <select name="grade"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                               focus:outline-none focus:ring-2 focus:ring-purple-500
+                               @error('grade') border-red-400 @enderror">
+                        <option value="">Select grade</option>
+                        @for($grade = 1; $grade <= 12; $grade++)
+                            <option value="{{ $grade }}" {{ old('grade') == $grade ? 'selected' : '' }}>{{ $grade }}</option>
+                        @endfor
+                    </select>
+                    @error('grade')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Section</label>
+                    <select name="section"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                               focus:outline-none focus:ring-2 focus:ring-purple-500
+                               @error('section') border-red-400 @enderror">
+                        <option value="">Select section</option>
+                        @foreach(['A', 'B', 'C', 'D', 'E'] as $section)
+                            <option value="{{ $section }}" {{ old('section') === $section ? 'selected' : '' }}>{{ $section }}</option>
+                        @endforeach
+                    </select>
+                    @error('section')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
 
             <div class="mb-4">
