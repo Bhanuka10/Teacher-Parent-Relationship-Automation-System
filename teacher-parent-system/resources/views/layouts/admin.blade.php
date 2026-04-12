@@ -31,6 +31,11 @@
                       {{ request()->routeIs('admin.users.*') && request('role') === 'parent' ? 'bg-purple-600 text-white' : 'text-purple-200 hover:bg-purple-700' }}">
                 Students
             </a>
+            <a href="{{ route('admin.classes.index') }}"
+               class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm
+                      {{ request()->routeIs('admin.classes.*') ? 'bg-purple-600 text-white' : 'text-purple-200 hover:bg-purple-700' }}">
+                Classes
+            </a>
         </nav>
 
         <div class="px-4 py-4 border-t border-purple-700">

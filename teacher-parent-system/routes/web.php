@@ -35,7 +35,10 @@ Route::middleware(['auth', 'admin'])
     ->group(function () {
         Route::get('/dashboard', [AdminDash::class, 'index'])->name('dashboard');
         Route::resource('users',    UserController::class);
-        Route::resource('classes',  ClassController::class);
+        Route::patch('classes/{school_class}/remove-teacher', [ClassController::class, 'removeTeacher'])->name('classes.remove-teacher');
+        Route::patch('classes/{school_class}/reset', [ClassController::class, 'resetClass'])->name('classes.reset');
+        Route::resource('classes',  ClassController::class)
+            ->parameters(['classes' => 'school_class']);
         Route::resource('students', StudentController::class);
     });
 
