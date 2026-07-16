@@ -17,4 +17,9 @@ class SchoolClass extends Model
     {
         return $this->hasMany(Student::class, 'school_class_id');
     }
+
+    public function attendance()
+    {
+        return $this->hasManyThrough(Attendance::class, Student::class, 'school_class_id', 'student_id');
+    }
 }
