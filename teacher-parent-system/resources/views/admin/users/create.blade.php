@@ -32,7 +32,7 @@
             </div>
         </div>
 
-        <form method="POST" action="{{ route('admin.users.store') }}" data-tab-panel="teacher" class="tab-panel">
+        <form method="POST" action="{{ route('admin.users.store') }}" data-tab-panel="teacher" class="tab-panel" data-auto-password-form>
             @csrf
             <input type="hidden" name="role" value="teacher">
 
@@ -49,7 +49,7 @@
 
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
-                <input type="email" name="email" value="{{ old('email') }}"
+                <input type="email" name="email" value="{{ old('email') }}" data-auto-password-email
                     class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
                            focus:outline-none focus:ring-2 focus:ring-purple-500
                            @error('email') border-red-400 @enderror">
@@ -97,10 +97,28 @@
                     Temporary password
                     <span class="font-normal text-gray-400">(user must change on first login)</span>
                 </label>
-                <input type="password" name="password"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
-                           focus:outline-none focus:ring-2 focus:ring-purple-500
-                           @error('password') border-red-400 @enderror">
+                <div class="relative">
+                    <input type="password" name="password" value="{{ old('password') }}" data-auto-password
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2.5 pr-12 text-sm
+                               focus:outline-none focus:ring-2 focus:ring-purple-500
+                               @error('password') border-red-400 @enderror">
+                    <button type="button" data-password-toggle data-password-target="password"
+                        class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700"
+                        aria-label="Show password" aria-pressed="false">
+                        <span data-password-icon-show>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.25 12s3.75-7.5 9.75-7.5 9.75 7.5 9.75 7.5-3.75 7.5-9.75 7.5S2.25 12 2.25 12z" />
+                                <circle cx="12" cy="12" r="3" stroke-width="1.8" />
+                            </svg>
+                        </span>
+                        <span data-password-icon-hide class="hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.98 8.223A10.477 10.477 0 0 0 2.25 12s3.75 7.5 9.75 7.5c1.57 0 3.03-.325 4.354-.88M6.53 6.53C8.264 5.49 10.164 4.5 12 4.5c6 0 9.75 7.5 9.75 7.5a19.67 19.67 0 0 1-3.023 4.08M9.88 9.88a3 3 0 0 0 4.24 4.24" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 3l18 18" />
+                            </svg>
+                        </span>
+                    </button>
+                </div>
                 @error('password')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
@@ -108,9 +126,27 @@
 
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>
-                <input type="password" name="password_confirmation"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
-                           focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <div class="relative">
+                    <input type="password" name="password_confirmation" value="{{ old('password_confirmation') }}" data-auto-password-confirm
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2.5 pr-12 text-sm
+                               focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <button type="button" data-password-toggle data-password-target="password_confirmation"
+                        class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700"
+                        aria-label="Show confirm password" aria-pressed="false">
+                        <span data-password-icon-show>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.25 12s3.75-7.5 9.75-7.5 9.75 7.5 9.75 7.5-3.75 7.5-9.75 7.5S2.25 12 2.25 12z" />
+                                <circle cx="12" cy="12" r="3" stroke-width="1.8" />
+                            </svg>
+                        </span>
+                        <span data-password-icon-hide class="hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.98 8.223A10.477 10.477 0 0 0 2.25 12s3.75 7.5 9.75 7.5c1.57 0 3.03-.325 4.354-.88M6.53 6.53C8.264 5.49 10.164 4.5 12 4.5c6 0 9.75 7.5 9.75 7.5a19.67 19.67 0 0 1-3.023 4.08M9.88 9.88a3 3 0 0 0 4.24 4.24" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 3l18 18" />
+                            </svg>
+                        </span>
+                    </button>
+                </div>
             </div>
 
             <button type="submit"
@@ -119,7 +155,7 @@
             </button>
         </form>
 
-        <form method="POST" action="{{ route('admin.users.store') }}" data-tab-panel="parent" class="tab-panel">
+        <form method="POST" action="{{ route('admin.users.store') }}" data-tab-panel="parent" class="tab-panel" data-auto-password-form>
             @csrf
             <input type="hidden" name="role" value="parent">
 
@@ -136,7 +172,7 @@
 
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
-                <input type="email" name="email" value="{{ old('email') }}"
+                <input type="email" name="email" value="{{ old('email') }}" data-auto-password-email
                     class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
                            focus:outline-none focus:ring-2 focus:ring-purple-500
                            @error('email') border-red-400 @enderror">
@@ -184,10 +220,28 @@
                     Temporary password
                     <span class="font-normal text-gray-400">(user must change on first login)</span>
                 </label>
-                <input type="password" name="password"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
-                           focus:outline-none focus:ring-2 focus:ring-purple-500
-                           @error('password') border-red-400 @enderror">
+                <div class="relative">
+                    <input type="password" name="password" value="{{ old('password') }}" data-auto-password
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2.5 pr-12 text-sm
+                               focus:outline-none focus:ring-2 focus:ring-purple-500
+                               @error('password') border-red-400 @enderror">
+                    <button type="button" data-password-toggle data-password-target="password"
+                        class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700"
+                        aria-label="Show password" aria-pressed="false">
+                        <span data-password-icon-show>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.25 12s3.75-7.5 9.75-7.5 9.75 7.5 9.75 7.5-3.75 7.5-9.75 7.5S2.25 12 2.25 12z" />
+                                <circle cx="12" cy="12" r="3" stroke-width="1.8" />
+                            </svg>
+                        </span>
+                        <span data-password-icon-hide class="hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.98 8.223A10.477 10.477 0 0 0 2.25 12s3.75 7.5 9.75 7.5c1.57 0 3.03-.325 4.354-.88M6.53 6.53C8.264 5.49 10.164 4.5 12 4.5c6 0 9.75 7.5 9.75 7.5a19.67 19.67 0 0 1-3.023 4.08M9.88 9.88a3 3 0 0 0 4.24 4.24" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 3l18 18" />
+                            </svg>
+                        </span>
+                    </button>
+                </div>
                 @error('password')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
@@ -195,9 +249,27 @@
 
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>
-                <input type="password" name="password_confirmation"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
-                           focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <div class="relative">
+                    <input type="password" name="password_confirmation" value="{{ old('password_confirmation') }}" data-auto-password-confirm
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2.5 pr-12 text-sm
+                               focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <button type="button" data-password-toggle data-password-target="password_confirmation"
+                        class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700"
+                        aria-label="Show confirm password" aria-pressed="false">
+                        <span data-password-icon-show>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.25 12s3.75-7.5 9.75-7.5 9.75 7.5 9.75 7.5-3.75 7.5-9.75 7.5S2.25 12 2.25 12z" />
+                                <circle cx="12" cy="12" r="3" stroke-width="1.8" />
+                            </svg>
+                        </span>
+                        <span data-password-icon-hide class="hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.98 8.223A10.477 10.477 0 0 0 2.25 12s3.75 7.5 9.75 7.5c1.57 0 3.03-.325 4.354-.88M6.53 6.53C8.264 5.49 10.164 4.5 12 4.5c6 0 9.75 7.5 9.75 7.5a19.67 19.67 0 0 1-3.023 4.08M9.88 9.88a3 3 0 0 0 4.24 4.24" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 3l18 18" />
+                            </svg>
+                        </span>
+                    </button>
+                </div>
             </div>
 
             @error('role')
@@ -218,6 +290,64 @@
         const buttons = document.querySelectorAll('.tab-btn');
         const panels = document.querySelectorAll('.tab-panel');
 
+        function getTemporaryPassword(email) {
+            if (!email || !email.includes('@')) {
+                return '';
+            }
+
+            return email.split('@')[0].trim();
+        }
+
+        function syncTemporaryPassword(form) {
+            const emailInput = form.querySelector('[data-auto-password-email]');
+            const passwordInput = form.querySelector('[data-auto-password]');
+            const confirmInput = form.querySelector('[data-auto-password-confirm]');
+
+            if (!emailInput || !passwordInput || !confirmInput) {
+                return;
+            }
+
+            const applyPassword = () => {
+                const temporaryPassword = getTemporaryPassword(emailInput.value);
+
+                if (!temporaryPassword) {
+                    return;
+                }
+
+                passwordInput.value = temporaryPassword;
+                confirmInput.value = temporaryPassword;
+            };
+
+            emailInput.addEventListener('input', applyPassword);
+            emailInput.addEventListener('blur', applyPassword);
+
+            applyPassword();
+        }
+
+        function syncPasswordToggle(button) {
+            const targetName = button.dataset.passwordTarget;
+            const input = button.closest('form')?.querySelector(`[name="${targetName}"]`);
+
+            if (!input) {
+                return;
+            }
+
+            const showIcon = button.querySelector('[data-password-icon-show]');
+            const hideIcon = button.querySelector('[data-password-icon-hide]');
+
+            const setVisible = (visible) => {
+                input.type = visible ? 'text' : 'password';
+                button.setAttribute('aria-pressed', visible ? 'true' : 'false');
+                button.setAttribute('aria-label', visible ? 'Hide password' : 'Show password');
+                showIcon?.classList.toggle('hidden', visible);
+                hideIcon?.classList.toggle('hidden', !visible);
+            };
+
+            button.addEventListener('click', () => {
+                setVisible(input.type === 'password');
+            });
+        }
+
         function setActiveTab(tab) {
             buttons.forEach((button) => {
                 const isActive = button.dataset.tabTarget === tab;
@@ -236,6 +366,9 @@
         buttons.forEach((button) => {
             button.addEventListener('click', () => setActiveTab(button.dataset.tabTarget));
         });
+
+        document.querySelectorAll('[data-auto-password-form]').forEach(syncTemporaryPassword);
+        document.querySelectorAll('[data-password-toggle]').forEach(syncPasswordToggle);
 
         setActiveTab(initialTab);
     })();
