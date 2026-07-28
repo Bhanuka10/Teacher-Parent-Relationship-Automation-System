@@ -97,13 +97,13 @@
                     Temporary password
                     <span class="font-normal text-gray-400">(user must change on first login)</span>
                 </label>
-                <div class="relative">
+                <div style="position:relative;">
                     <input type="password" name="password" value="{{ old('password') }}" data-auto-password
                         class="w-full border border-gray-300 rounded-lg px-3 py-2.5 pr-16 text-sm
                                focus:outline-none focus:ring-2 focus:ring-purple-500
                                @error('password') border-red-400 @enderror">
 
-                    <div class="absolute inset-y-0 right-0 flex items-center space-x-1 pr-1">
+                    <div style="position:absolute;top:0;right:0;bottom:0;display:flex;align-items:center;gap:2px;padding-right:4px;">
                         <button type="button" data-password-generate
                             class="flex items-center px-2 py-1 text-gray-500 hover:text-gray-700 rounded-md"
                             title="Generate password">
@@ -138,12 +138,13 @@
 
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>
-                <div class="relative">
+                <div style="position:relative;">
                     <input type="password" name="password_confirmation" value="{{ old('password_confirmation') }}" data-auto-password-confirm
                         class="w-full border border-gray-300 rounded-lg px-3 py-2.5 pr-12 text-sm
                                focus:outline-none focus:ring-2 focus:ring-purple-500">
                     <button type="button" data-password-toggle data-password-target="password_confirmation"
-                        class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700"
+                        class="text-gray-500 hover:text-gray-700"
+                        style="position:absolute;top:0;right:0;bottom:0;display:flex;align-items:center;padding:0 12px;"
                         aria-label="Show confirm password" aria-pressed="false">
                         <span data-password-icon-show>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -232,13 +233,13 @@
                     Temporary password
                     <span class="font-normal text-gray-400">(user must change on first login)</span>
                 </label>
-                <div class="relative">
+                <div style="position:relative;">
                     <input type="password" name="password" value="{{ old('password') }}" data-auto-password
                         class="w-full border border-gray-300 rounded-lg px-3 py-2.5 pr-16 text-sm
                                focus:outline-none focus:ring-2 focus:ring-purple-500
                                @error('password') border-red-400 @enderror">
 
-                    <div class="absolute inset-y-0 right-0 flex items-center space-x-1 pr-1">
+                    <div style="position:absolute;top:0;right:0;bottom:0;display:flex;align-items:center;gap:2px;padding-right:4px;">
                         <button type="button" data-password-generate
                             class="flex items-center px-2 py-1 text-gray-500 hover:text-gray-700 rounded-md"
                             title="Generate password">
@@ -273,12 +274,13 @@
 
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>
-                <div class="relative">
+                <div style="position:relative;">
                     <input type="password" name="password_confirmation" value="{{ old('password_confirmation') }}" data-auto-password-confirm
                         class="w-full border border-gray-300 rounded-lg px-3 py-2.5 pr-12 text-sm
                                focus:outline-none focus:ring-2 focus:ring-purple-500">
                     <button type="button" data-password-toggle data-password-target="password_confirmation"
-                        class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700"
+                        class="text-gray-500 hover:text-gray-700"
+                        style="position:absolute;top:0;right:0;bottom:0;display:flex;align-items:center;padding:0 12px;"
                         aria-label="Show confirm password" aria-pressed="false">
                         <span data-password-icon-show>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
