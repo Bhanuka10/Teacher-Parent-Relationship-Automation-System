@@ -13,6 +13,8 @@ use App\Http\Controllers\Teacher\AttendanceController as TeacherAttendance;
 use App\Http\Controllers\Teacher\ProfileController as TeacherProfile;
 use App\Http\Controllers\Parent\DashboardController as ParentDash;
 use App\Http\Controllers\Parent\ProfileController;
+use App\Http\Controllers\Admin\MessageController as AdminMessage;
+use App\Http\Controllers\MessageInboxController;
 
 // Guest routes
 Route::middleware('guest')->group(function () {
@@ -38,6 +40,9 @@ Route::middleware(['auth', 'admin'])
     ->group(function () {
         Route::get('/dashboard', [AdminDash::class, 'index'])->name('dashboard');
         Route::get('/attendance/history', [AdminAttendance::class, 'history'])->name('attendance.history');
+        Route::get('/messages', [AdminMessage::class, 'index'])->name('messages.index');
+        Route::post('/messages', [AdminMessage::class, 'store'])->name('messages.store');
+        Route::get('/messages/{message}', [AdminMessage::class, 'show'])->name('messages.show');
         Route::post('users/import', [UserController::class, 'import'])->name('users.import');
         Route::resource('users',    UserController::class);
         Route::patch('classes/{school_class}/remove-teacher', [ClassController::class, 'removeTeacher'])->name('classes.remove-teacher');
@@ -58,6 +63,8 @@ Route::middleware(['auth', 'teacher'])
         Route::get('/attendance/history', [TeacherAttendance::class, 'history'])->name('attendance.history');
         Route::get('/profile', [TeacherProfile::class, 'show'])->name('profile');
         Route::put('/profile', [TeacherProfile::class, 'update'])->name('profile.update');
+        Route::get('/messages', [MessageInboxController::class, 'index'])->name('messages.index');
+        Route::get('/messages/{recipient}', [MessageInboxController::class, 'show'])->name('messages.show');
     });
 
 // Parent routes
@@ -69,4 +76,6 @@ Route::middleware(['auth', 'parent'])
         Route::get('/profile',          [ProfileController::class, 'show'])->name('profile');
         Route::put('/profile/student',  [ProfileController::class, 'updateStudentProfile'])->name('profile.student');
         Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+        Route::get('/messages', [MessageInboxController::class, 'index'])->name('messages.index');
+        Route::get('/messages/{recipient}', [MessageInboxController::class, 'show'])->name('messages.show');
     });

@@ -66,6 +66,14 @@
                 </svg>
                 <span class="app-sidebar-text">Attendance</span>
             </a>
+
+            <a href="{{ route('admin.messages.index') }}"
+               class="app-sidebar-link {{ request()->routeIs('admin.messages.*') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white' }}">
+                <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.75 6.75A1.75 1.75 0 0 1 6.5 5h11A1.75 1.75 0 0 1 19.25 6.75v7.5A1.75 1.75 0 0 1 17.5 16h-6l-3.75 3V16H6.5a1.75 1.75 0 0 1-1.75-1.75v-7.5Z" />
+                </svg>
+                <span class="app-sidebar-text">Messages</span>
+            </a>
         </nav>
 
         {{-- Logout --}}
@@ -121,5 +129,6 @@
         @yield('content')
     </main>
 
+    @stack('scripts')
 </body>
 </html>

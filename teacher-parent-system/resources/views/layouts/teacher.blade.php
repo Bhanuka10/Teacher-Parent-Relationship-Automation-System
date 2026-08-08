@@ -58,6 +58,15 @@
                 </svg>
                 <span class="app-sidebar-text">Attendance History</span>
             </a>
+
+            @php($unreadMessages = \App\Models\MessageRecipient::where('user_id', auth()->id())->whereNull('read_at')->count())
+            <a href="{{ route('teacher.messages.index') }}"
+               class="app-sidebar-link {{ request()->routeIs('teacher.messages.*') ? 'bg-teal-700 text-white' : 'text-teal-200 hover:bg-teal-800 hover:text-white' }}">
+                <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.75 6.75A1.75 1.75 0 0 1 6.5 5h11A1.75 1.75 0 0 1 19.25 6.75v7.5A1.75 1.75 0 0 1 17.5 16h-6l-3.75 3V16H6.5a1.75 1.75 0 0 1-1.75-1.75v-7.5Z" />
+                </svg>
+                <span class="app-sidebar-text">Messages @if($unreadMessages)<span class="ml-1 rounded-full bg-teal-500 px-1.5 py-0.5 text-[10px] text-white">{{ $unreadMessages }}</span>@endif</span>
+            </a>
         </nav>
 
         {{-- Logout --}}

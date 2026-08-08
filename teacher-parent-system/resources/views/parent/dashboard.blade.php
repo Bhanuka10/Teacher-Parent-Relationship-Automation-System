@@ -44,7 +44,7 @@
     </div>
     <div class="bg-white rounded-xl border border-gray-200 p-5">
         <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Notifications</p>
-        <p class="text-lg font-semibold text-orange-600">{{ $todayAttendance ? '1 unread' : '0 unread' }}</p>
+        <a href="{{ route('parent.messages.index') }}" class="text-lg font-semibold text-orange-600 hover:underline">{{ $unreadMessages }} message{{ $unreadMessages === 1 ? '' : 's' }} unread</a>
     </div>
 </div>
 

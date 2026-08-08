@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Parent;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use App\Models\MessageRecipient;
 
 class DashboardController extends Controller
 {
@@ -25,6 +26,8 @@ class DashboardController extends Controller
                 ->first();
         }
 
-        return view('parent.dashboard', compact('parent', 'student', 'todayAttendance', 'latestAttendance'));
+        $unreadMessages = MessageRecipient::where('user_id', $parent->id)->whereNull('read_at')->count();
+
+        return view('parent.dashboard', compact('parent', 'student', 'todayAttendance', 'latestAttendance', 'unreadMessages'));
     }
 }

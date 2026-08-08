@@ -13,7 +13,7 @@
     </div>
     <div class="bg-white rounded-xl border border-gray-200 p-5">
         <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Messages</p>
-        <p class="text-lg font-semibold text-teal-700">0 unread</p>
+        <a href="{{ route('teacher.messages.index') }}" class="text-lg font-semibold text-teal-700 hover:underline">{{ $unreadMessages }} unread</a>
     </div>
     <div class="bg-white rounded-xl border border-gray-200 p-5">
         <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Notices</p>
