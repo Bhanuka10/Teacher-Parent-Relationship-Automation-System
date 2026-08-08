@@ -38,6 +38,7 @@ Route::middleware(['auth', 'admin'])
     ->group(function () {
         Route::get('/dashboard', [AdminDash::class, 'index'])->name('dashboard');
         Route::get('/attendance/history', [AdminAttendance::class, 'history'])->name('attendance.history');
+        Route::post('users/import', [UserController::class, 'import'])->name('users.import');
         Route::resource('users',    UserController::class);
         Route::patch('classes/{school_class}/remove-teacher', [ClassController::class, 'removeTeacher'])->name('classes.remove-teacher');
         Route::patch('classes/{school_class}/reset', [ClassController::class, 'resetClass'])->name('classes.reset');

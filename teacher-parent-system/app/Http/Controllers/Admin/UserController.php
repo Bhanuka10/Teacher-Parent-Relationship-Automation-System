@@ -9,6 +9,8 @@ use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -147,6 +149,135 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index', ['role' => $role])
             ->with('success', $roleLabel.' account created.');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'role'     => ['required', 'in:teacher,parent'],
+            'csv_file' => ['required', 'file', 'mimes:csv,txt', 'max:2048'],
+        ]);
+
+        $role = $request->role;
+
+        $handle = fopen($request->file('csv_file')->getRealPath(), 'r');
+        if ($handle === false) {
+            return redirect()->route('admin.users.index', ['role' => $role])
+                ->with('error', 'Could not read the uploaded file.');
+        }
+
+        $header = fgetcsv($handle);
+        if ($header === false) {
+            fclose($handle);
+            return redirect()->route('admin.users.index', ['role' => $role])
+                ->with('error', 'The CSV file is empty.');
+        }
+
+        $columns = array_map(fn ($col) => strtolower(trim((string) $col)), $header);
+
+        $findColumn = function (array $aliases) use ($columns) {
+            foreach ($aliases as $alias) {
+                $index = array_search($alias, $columns, true);
+                if ($index !== false) {
+                    return $index;
+                }
+            }
+            return null;
+        };
+
+        $nameIndex    = $findColumn(['full name', 'name']);
+        $emailIndex   = $findColumn(['email address', 'email']);
+        $gradeIndex   = $findColumn(['grade']);
+        $sectionIndex = $findColumn(['section']);
+
+        if ($nameIndex === null || $emailIndex === null || $gradeIndex === null || $sectionIndex === null) {
+            fclose($handle);
+            return redirect()->route('admin.users.index', ['role' => $role])
+                ->with('error', 'The CSV must include Full name, Email address, Grade and Section columns.');
+        }
+
+        $created     = 0;
+        $errors      = [];
+        $seenEmails  = [];
+        $rowNumber   = 1; // header row
+
+        while (($row = fgetcsv($handle)) !== false) {
+            $rowNumber++;
+
+            $isBlankRow = count(array_filter($row, fn ($value) => trim((string) $value) !== '')) === 0;
+            if ($isBlankRow) {
+                continue;
+            }
+
+            $name    = trim((string) ($row[$nameIndex] ?? ''));
+            $email   = trim((string) ($row[$emailIndex] ?? ''));
+            $grade   = trim((string) ($row[$gradeIndex] ?? ''));
+            $section = strtoupper(trim((string) ($row[$sectionIndex] ?? '')));
+
+            $validator = Validator::make(
+                compact('name', 'email', 'grade', 'section'),
+                [
+                    'name'    => ['required', 'string', 'max:255'],
+                    'email'   => ['required', 'email', 'unique:users,email'],
+                    'grade'   => ['required', 'integer', 'between:1,12'],
+                    'section' => ['required', 'in:A,B,C,D,E'],
+                ]
+            );
+
+            if ($validator->fails()) {
+                $errors[] = "Row {$rowNumber}: ".implode(' ', $validator->errors()->all());
+                continue;
+            }
+
+            $emailKey = strtolower($email);
+            if (isset($seenEmails[$emailKey])) {
+                $errors[] = "Row {$rowNumber}: email {$email} is duplicated in this file.";
+                continue;
+            }
+            $seenEmails[$emailKey] = true;
+
+            $prefix   = $role === 'teacher' ? 'te-' : 'st-';
+            $password = $prefix.Str::before($email, '@');
+
+            $user = User::create([
+                'name'                 => $name,
+                'email'                => $email,
+                'role'                 => $role,
+                'password'             => Hash::make($password),
+                'must_change_password' => true,
+            ]);
+
+            $className   = $grade.'-'.$section;
+            $schoolClass = SchoolClass::firstOrCreate(['name' => $className]);
+
+            if ($role === 'teacher') {
+                $schoolClass->update(['teacher_id' => $user->id]);
+            } else {
+                Student::create([
+                    'name'             => $user->name,
+                    'admission_number' => 'ADM'.str_pad((string) $user->id, 5, '0', STR_PAD_LEFT),
+                    'school_class_id'  => $schoolClass->id,
+                    'parent_id'        => $user->id,
+                ]);
+            }
+
+            $created++;
+        }
+
+        fclose($handle);
+
+        $roleLabel = $role === 'parent' ? 'student' : 'teacher';
+        $message   = $created === 1
+            ? "1 {$roleLabel} account created."
+            : "{$created} {$roleLabel} accounts created.";
+
+        if (!empty($errors)) {
+            $message .= ' '.count($errors).' row(s) skipped — see details below.';
+        }
+
+        return redirect()->route('admin.users.index', ['role' => $role])
+            ->with('success', $message)
+            ->with('import_errors', $errors);
     }
 
     public function edit(User $user)

@@ -357,6 +357,39 @@
         stroke: #fff;
     }
 
+    /* ── CSV import row ── */
+    .ca-import-row {
+        display: flex;
+        gap: 14px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+    }
+
+    .ca-import-row input[type="file"] {
+        padding: 8px 12px;
+    }
+
+    .ca-import-hint {
+        font-size: 0.73rem;
+        color: #9ca3af;
+        margin-top: 6px;
+        line-height: 1.4;
+    }
+
+    .ca-import-hint code {
+        background: #f3f4f6;
+        border-radius: 4px;
+        padding: 1px 5px;
+        font-size: 0.71rem;
+    }
+
+    .ca-import-btn {
+        width: auto;
+        margin-top: 0;
+        padding: 10px 22px;
+        flex-shrink: 0;
+    }
+
     /* ── Info badge on password label ── */
     .ca-badge {
         display: inline-flex;
@@ -582,6 +615,30 @@
                 </div>{{-- /ca-form-cols --}}
             </form>
 
+            {{-- ════════ TEACHER CSV IMPORT ════════ --}}
+            <div class="tab-panel" data-tab-panel="teacher">
+                <div class="ca-divider"></div>
+                <div class="ca-section-label">Bulk Import via CSV</div>
+                <form method="POST" action="{{ route('admin.users.import') }}" enctype="multipart/form-data"
+                      class="ca-import-row">
+                    @csrf
+                    <input type="hidden" name="role" value="teacher">
+                    <div class="ca-field" style="flex:1; min-width:220px; margin-bottom:0;">
+                        <label class="ca-label" for="t-csv">CSV file</label>
+                        <input id="t-csv" type="file" name="csv_file" accept=".csv,text/csv" class="ca-input">
+                        <p class="ca-import-hint">
+                            Columns: <strong>Full name, Email address, Grade, Section</strong>. Passwords are generated automatically (<code>te-</code> + the part of the email before @).
+                        </p>
+                    </div>
+                    <button type="submit" class="ca-submit ca-import-btn">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/>
+                        </svg>
+                        Import CSV
+                    </button>
+                </form>
+            </div>
+
             {{-- ════════ STUDENT FORM ════════ --}}
             <form method="POST" action="{{ route('admin.users.store') }}"
                   data-tab-panel="parent" class="tab-panel" data-auto-password-form>
@@ -736,6 +793,30 @@
 
                 </div>{{-- /ca-form-cols --}}
             </form>
+
+            {{-- ════════ STUDENT CSV IMPORT ════════ --}}
+            <div class="tab-panel" data-tab-panel="parent">
+                <div class="ca-divider"></div>
+                <div class="ca-section-label">Bulk Import via CSV</div>
+                <form method="POST" action="{{ route('admin.users.import') }}" enctype="multipart/form-data"
+                      class="ca-import-row">
+                    @csrf
+                    <input type="hidden" name="role" value="parent">
+                    <div class="ca-field" style="flex:1; min-width:220px; margin-bottom:0;">
+                        <label class="ca-label" for="p-csv">CSV file</label>
+                        <input id="p-csv" type="file" name="csv_file" accept=".csv,text/csv" class="ca-input">
+                        <p class="ca-import-hint">
+                            Columns: <strong>Full name, Email address, Grade, Section</strong>. Passwords are generated automatically (<code>st-</code> + the part of the email before @).
+                        </p>
+                    </div>
+                    <button type="submit" class="ca-submit ca-import-btn">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/>
+                        </svg>
+                        Import CSV
+                    </button>
+                </form>
+            </div>
 
         </div>{{-- /card-body --}}
     </div>{{-- /card --}}
