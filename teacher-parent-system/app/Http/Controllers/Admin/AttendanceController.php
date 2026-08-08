@@ -14,34 +14,34 @@ class AttendanceController extends Controller
         $section = $request->query('section');
         $date = $request->query('date');
 
-        $records = Attendance::with([
+        $query = Attendance::with([
                 'student.profile',
                 'student.schoolClass',
                 'markedBy',
             ])
-            ->when($date, function ($query) use ($date) {
-                $query->whereDate('date', $date);
+            ->when($date, function ($q) use ($date) {
+                $q->whereDate('date', $date);
             })
-            ->when($grade || $section, function ($query) use ($grade, $section) {
-                $query->whereHas('student.schoolClass', function ($classQuery) use ($grade, $section) {
+            ->when($grade || $section, function ($q) use ($grade, $section) {
+                $q->whereHas('student.schoolClass', function ($classQuery) use ($grade, $section) {
                     if ($grade && $section) {
                         $classQuery->where('name', $grade.'-'.$section);
                         return;
                     }
-
                     if ($grade) {
                         $classQuery->where('name', 'like', $grade.'-%');
                     }
-
                     if ($section) {
                         $classQuery->where('name', 'like', '%-'.$section);
                     }
                 });
             })
             ->orderByDesc('date')
-            ->orderBy('student_id')
-            ->get();
+            ->orderBy('student_id');
 
-        return view('admin.attendance.history', compact('records', 'grade', 'section', 'date'));
+        $total   = $query->count();
+        $records = $query->paginate(10)->withQueryString();
+
+        return view('admin.attendance.history', compact('records', 'grade', 'section', 'date', 'total'));
     }
 }
