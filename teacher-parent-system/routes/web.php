@@ -16,9 +16,27 @@ use App\Http\Controllers\Parent\ProfileController;
 use App\Http\Controllers\Admin\MessageController as AdminMessage;
 use App\Http\Controllers\MessageInboxController;
 
+// Root: send guests to login, and already-authenticated users straight to
+// their dashboard. This must NOT sit behind the `guest` middleware — Laravel's
+// RedirectIfAuthenticated has no `dashboard`/`home` route to fall back to in
+// this app, so it defaults to redirecting back to `/`, which would bounce
+// forever between `/` and `/login` (ERR_TOO_MANY_REDIRECTS) for anyone with
+// an active session.
+Route::get('/', function () {
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
+
+    return match (auth()->user()->role) {
+        'admin'   => redirect()->route('admin.dashboard'),
+        'teacher' => redirect()->route('teacher.dashboard'),
+        'parent'  => redirect()->route('parent.dashboard'),
+        default   => redirect()->route('login'),
+    };
+});
+
 // Guest routes
 Route::middleware('guest')->group(function () {
-    Route::redirect('/', '/login');
     Route::get('/login',  [LoginController::class, 'showLogin'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
 });
