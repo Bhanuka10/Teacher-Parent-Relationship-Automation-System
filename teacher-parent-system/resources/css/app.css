@@ -115,6 +115,91 @@
         flex-shrink: 0;
     }
 
+    /* ── Sidebar: responsive ──
+       The sidebar is fixed-width and sticky, which quietly eats into the
+       content area on any page with its own breakpoints (e.g. the messages
+       two-column layout). Below 1180px it narrows; below 900px it collapses
+       to an icon rail; below 640px it becomes a horizontal scrollable bar. */
+    @media (max-width: 1180px) {
+        .app-sidebar {
+            width: 12rem;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .app-sidebar {
+            width: 4.75rem;
+        }
+
+        .app-sidebar-header {
+            justify-content: center;
+            padding: 16px 0;
+        }
+
+        .app-sidebar-link {
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        .app-sidebar-text {
+            display: none;
+        }
+
+        .sidebar-footer {
+            display: flex;
+            justify-content: center;
+        }
+
+        .sidebar-footer .app-sidebar-link {
+            width: auto;
+            padding: 10px;
+        }
+    }
+
+    @media (max-width: 640px) {
+        body.flex {
+            flex-direction: column;
+        }
+
+        .app-sidebar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: auto;
+            flex-direction: row;
+            align-items: center;
+            z-index: 40;
+        }
+
+        .app-sidebar-header {
+            border-bottom: none;
+            padding: 10px 12px;
+        }
+
+        nav.sidebar-nav {
+            flex: 1;
+            flex-direction: row;
+            padding: 6px 8px;
+            gap: 4px;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .app-sidebar-link {
+            min-height: 36px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-footer {
+            border-top: none;
+            padding: 6px 10px;
+        }
+
+        main.flex-1 {
+            padding: 20px;
+        }
+    }
+
     /* ── Flash Messages ── */
     .flash-success {
         display: flex;

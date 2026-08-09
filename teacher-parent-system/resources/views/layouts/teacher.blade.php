@@ -27,7 +27,7 @@
 
         {{-- Navigation --}}
         <nav class="sidebar-nav">
-            <a href="{{ route('teacher.dashboard') }}"
+            <a href="{{ route('teacher.dashboard') }}" title="Dashboard"
                class="app-sidebar-link {{ request()->routeIs('teacher.dashboard') ? 'bg-teal-700 text-white' : 'text-teal-200 hover:bg-teal-800 hover:text-white' }}">
                 <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h6.5v8h-6.5v-8ZM13.75 4h6.5v16h-6.5V4ZM3.75 4h6.5v5h-6.5V4Z" />
@@ -35,7 +35,7 @@
                 <span class="app-sidebar-text">Dashboard</span>
             </a>
 
-            <a href="{{ route('teacher.profile') }}"
+            <a href="{{ route('teacher.profile') }}" title="My Profile"
                class="app-sidebar-link {{ request()->routeIs('teacher.profile*') ? 'bg-teal-700 text-white' : 'text-teal-200 hover:bg-teal-800 hover:text-white' }}">
                 <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 13.25a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM5.75 19.25c.8-2.56 3.08-4.25 6.25-4.25s5.45 1.69 6.25 4.25" />
@@ -43,7 +43,7 @@
                 <span class="app-sidebar-text">My Profile</span>
             </a>
 
-            <a href="{{ route('teacher.attendance.index') }}"
+            <a href="{{ route('teacher.attendance.index') }}" title="Mark Attendance"
                class="app-sidebar-link {{ request()->routeIs('teacher.attendance.index') ? 'bg-teal-700 text-white' : 'text-teal-200 hover:bg-teal-800 hover:text-white' }}">
                 <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5.75 12.5 9.5 16.25 18.25 7.75M4.75 5.75h14.5v12.5H4.75V5.75Z" />
@@ -51,7 +51,7 @@
                 <span class="app-sidebar-text">Mark Attendance</span>
             </a>
 
-            <a href="{{ route('teacher.attendance.history') }}"
+            <a href="{{ route('teacher.attendance.history') }}" title="Attendance History"
                class="app-sidebar-link {{ request()->routeIs('teacher.attendance.history') ? 'bg-teal-700 text-white' : 'text-teal-200 hover:bg-teal-800 hover:text-white' }}">
                 <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M7.75 4.75v3M16.25 4.75v3M5.25 8.25h13.5M6 6.25h12a1.5 1.5 0 0 1 1.5 1.5V18A1.5 1.5 0 0 1 18 19.5H6A1.5 1.5 0 0 1 4.5 18V7.75a1.5 1.5 0 0 1 1.5-1.5ZM8 13.5h8M8 16h5" />
@@ -60,7 +60,7 @@
             </a>
 
             @php($unreadMessages = \App\Models\MessageRecipient::where('user_id', auth()->id())->whereNull('read_at')->count())
-            <a href="{{ route('teacher.messages.index') }}"
+            <a href="{{ route('teacher.messages.index') }}" title="Messages{{ $unreadMessages ? ' ('.$unreadMessages.' unread)' : '' }}"
                class="app-sidebar-link {{ request()->routeIs('teacher.messages.*') ? 'bg-teal-700 text-white' : 'text-teal-200 hover:bg-teal-800 hover:text-white' }}">
                 <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.75 6.75A1.75 1.75 0 0 1 6.5 5h11A1.75 1.75 0 0 1 19.25 6.75v7.5A1.75 1.75 0 0 1 17.5 16h-6l-3.75 3V16H6.5a1.75 1.75 0 0 1-1.75-1.75v-7.5Z" />
@@ -73,7 +73,7 @@
         <div class="sidebar-footer">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit" class="app-sidebar-link text-teal-300 hover:bg-teal-800 hover:text-white">
+                <button type="submit" title="Log Out" class="app-sidebar-link text-teal-300 hover:bg-teal-800 hover:text-white">
                     <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 8.75V6.5a1.75 1.75 0 0 0-1.75-1.75H6.5A1.75 1.75 0 0 0 4.75 6.5v11A1.75 1.75 0 0 0 6.5 19.25H14a1.75 1.75 0 0 0 1.75-1.75v-2.25M11.75 12h7.5M16.75 9.5l2.5 2.5-2.5 2.5" />
                     </svg>

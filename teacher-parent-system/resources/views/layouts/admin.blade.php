@@ -27,7 +27,7 @@
 
         {{-- Navigation --}}
         <nav class="sidebar-nav">
-            <a href="{{ route('admin.dashboard') }}"
+            <a href="{{ route('admin.dashboard') }}" title="Dashboard"
                class="app-sidebar-link {{ request()->routeIs('admin.dashboard') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white' }}">
                 <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h6.5v8h-6.5v-8ZM13.75 4h6.5v16h-6.5V4ZM3.75 4h6.5v5h-6.5V4Z" />
@@ -35,7 +35,7 @@
                 <span class="app-sidebar-text">Dashboard</span>
             </a>
 
-            <a href="{{ route('admin.users.index', ['role' => 'teacher']) }}"
+            <a href="{{ route('admin.users.index', ['role' => 'teacher']) }}" title="Teachers"
                class="app-sidebar-link {{ request()->routeIs('admin.users.*') && request('role') !== 'parent' ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white' }}">
                 <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 14.25c3.25 0 5.75 1.54 5.75 3.5v1.5H6.25v-1.5c0-1.96 2.5-3.5 5.75-3.5ZM12 11a3.25 3.25 0 1 0 0-6.5A3.25 3.25 0 0 0 12 11ZM18.5 6.75h2.75M19.88 5.38v2.75" />
@@ -43,7 +43,7 @@
                 <span class="app-sidebar-text">Teachers</span>
             </a>
 
-            <a href="{{ route('admin.users.index', ['role' => 'parent']) }}"
+            <a href="{{ route('admin.users.index', ['role' => 'parent']) }}" title="Students"
                class="app-sidebar-link {{ request()->routeIs('admin.users.*') && request('role') === 'parent' ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white' }}">
                 <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 13.5c3.4 0 6 1.54 6 3.45v1.8H6v-1.8c0-1.91 2.6-3.45 6-3.45ZM12 10.75A3.25 3.25 0 1 0 12 4.25a3.25 3.25 0 0 0 0 6.5ZM4.75 20.25h14.5" />
@@ -51,7 +51,7 @@
                 <span class="app-sidebar-text">Students</span>
             </a>
 
-            <a href="{{ route('admin.classes.index') }}"
+            <a href="{{ route('admin.classes.index') }}" title="Classes"
                class="app-sidebar-link {{ request()->routeIs('admin.classes.*') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white' }}">
                 <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.75 5.5h14.5v13H4.75v-13ZM8 9h8M8 12h5M8 15h7" />
@@ -59,7 +59,7 @@
                 <span class="app-sidebar-text">Classes</span>
             </a>
 
-            <a href="{{ route('admin.attendance.history') }}"
+            <a href="{{ route('admin.attendance.history') }}" title="Attendance"
                class="app-sidebar-link {{ request()->routeIs('admin.attendance.*') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white' }}">
                 <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M7.75 4.75v3M16.25 4.75v3M5.25 8.25h13.5M6 6.25h12a1.5 1.5 0 0 1 1.5 1.5V18A1.5 1.5 0 0 1 18 19.5H6A1.5 1.5 0 0 1 4.5 18V7.75a1.5 1.5 0 0 1 1.5-1.5ZM8 14l2 2 5-5" />
@@ -67,7 +67,7 @@
                 <span class="app-sidebar-text">Attendance</span>
             </a>
 
-            <a href="{{ route('admin.messages.index') }}"
+            <a href="{{ route('admin.messages.index') }}" title="Messages"
                class="app-sidebar-link {{ request()->routeIs('admin.messages.*') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white' }}">
                 <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.75 6.75A1.75 1.75 0 0 1 6.5 5h11A1.75 1.75 0 0 1 19.25 6.75v7.5A1.75 1.75 0 0 1 17.5 16h-6l-3.75 3V16H6.5a1.75 1.75 0 0 1-1.75-1.75v-7.5Z" />
@@ -80,7 +80,7 @@
         <div class="sidebar-footer">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit" class="app-sidebar-link text-indigo-300 hover:bg-indigo-800 hover:text-white">
+                <button type="submit" title="Log Out" class="app-sidebar-link text-indigo-300 hover:bg-indigo-800 hover:text-white">
                     <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 8.75V6.5a1.75 1.75 0 0 0-1.75-1.75H6.5A1.75 1.75 0 0 0 4.75 6.5v11A1.75 1.75 0 0 0 6.5 19.25H14a1.75 1.75 0 0 0 1.75-1.75v-2.25M11.75 12h7.5M16.75 9.5l2.5 2.5-2.5 2.5" />
                     </svg>
