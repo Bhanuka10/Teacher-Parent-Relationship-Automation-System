@@ -52,7 +52,7 @@
         <div class="mt-3 rounded-lg bg-gray-50 p-3 text-xs text-gray-600">
             @if($homework->type === 'file')
                 @if($submission->file_path)
-                    <a href="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($submission->file_path) }}" target="_blank" class="inline-flex items-center gap-1.5 font-semibold text-indigo-600 hover:text-indigo-800">
+                    <a href="{{ asset('storage/'.$submission->file_path) }}" target="_blank" class="inline-flex items-center gap-1.5 font-semibold text-indigo-600 hover:text-indigo-800">
                         <svg style="width:14px;height:14px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v13m0 0 4-4m-4 4-4-4M4 20h16"/></svg>
                         {{ $submission->file_original_name ?? 'Download file' }}
                     </a>

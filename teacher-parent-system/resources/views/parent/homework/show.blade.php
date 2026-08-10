@@ -50,7 +50,7 @@
                     @endforeach
                 </div>
             @elseif($submission->file_path)
-                <a href="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($submission->file_path) }}" target="_blank" class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-orange-600 hover:text-orange-800">
+                <a href="{{ asset('storage/'.$submission->file_path) }}" target="_blank" class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-orange-600 hover:text-orange-800">
                     <svg style="width:14px;height:14px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v13m0 0 4-4m-4 4-4-4M4 20h16"/></svg>
                     {{ $submission->file_original_name }}
                 </a>
@@ -65,7 +65,7 @@
                 @if($submission->file_path)
                     <p class="mt-3 text-sm text-gray-600">
                         Current file:
-                        <a href="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($submission->file_path) }}" target="_blank" class="font-semibold text-orange-600 hover:text-orange-800">{{ $submission->file_original_name }}</a>
+                        <a href="{{ asset('storage/'.$submission->file_path) }}" target="_blank" class="font-semibold text-orange-600 hover:text-orange-800">{{ $submission->file_original_name }}</a>
                     </p>
                 @endif
                 @if(!$homework->isPastDue())
