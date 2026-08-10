@@ -42,7 +42,7 @@
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                 <input type="text" name="full_name" value="{{ old('full_name', $profile?->full_name ?? $student?->name) }}"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 @error('full_name') border-red-400 @enderror">
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 @error('full_name') @enderror">
                 @error('full_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
@@ -55,7 +55,7 @@
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Index Number (unique)</label>
                 <input type="text" name="index_number" value="{{ old('index_number', $profile?->index_number) }}"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 @error('index_number') border-red-400 @enderror">
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 @error('index_number') @enderror">
                 @error('index_number') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
@@ -63,14 +63,14 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
                     <input type="date" name="date_of_birth" value="{{ old('date_of_birth', optional($profile?->date_of_birth)->format('Y-m-d')) }}"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 @error('date_of_birth') border-red-400 @enderror">
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 @error('date_of_birth') @enderror">
                     @error('date_of_birth') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
                     <select name="gender"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 @error('gender') border-red-400 @enderror">
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 @error('gender') @enderror">
                         <option value="">Select gender</option>
                         <option value="male" {{ old('gender', $profile?->gender) === 'male' ? 'selected' : '' }}>Male</option>
                         <option value="female" {{ old('gender', $profile?->gender) === 'female' ? 'selected' : '' }}>Female</option>
@@ -84,14 +84,14 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Parent phone number</label>
                     <input type="text" name="parent_phone_number" value="{{ old('parent_phone_number', $profile?->parent_phone_number) }}"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 @error('parent_phone_number') border-red-400 @enderror">
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 @error('parent_phone_number') @enderror">
                     @error('parent_phone_number') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Parent email</label>
                     <input type="email" name="parent_email" value="{{ old('parent_email', $profile?->parent_email ?? auth()->user()->email) }}"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 @error('parent_email') border-red-400 @enderror">
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 @error('parent_email') @enderror">
                     @error('parent_email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
             </div>
@@ -99,7 +99,7 @@
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
                 <textarea name="address" rows="3"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 @error('address') border-red-400 @enderror">{{ old('address', $profile?->address) }}</textarea>
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 @error('address') @enderror">{{ old('address', $profile?->address) }}</textarea>
                 @error('address') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
@@ -122,7 +122,7 @@
                 <input type="password" name="current_password"
                     class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
                            focus:outline-none focus:ring-2 focus:ring-orange-400
-                           @error('current_password') border-red-400 @enderror">
+                           @error('current_password') @enderror">
                 @error('current_password')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
@@ -133,7 +133,7 @@
                 <input type="password" name="password"
                     class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
                            focus:outline-none focus:ring-2 focus:ring-orange-400
-                           @error('password') border-red-400 @enderror">
+                           @error('password') @enderror">
                 @error('password')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
