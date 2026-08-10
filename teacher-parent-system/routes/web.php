@@ -86,6 +86,7 @@ Route::middleware(['auth', 'teacher'])
         Route::get('/attendance/history', [TeacherAttendance::class, 'history'])->name('attendance.history');
         Route::get('/profile', [TeacherProfile::class, 'show'])->name('profile');
         Route::put('/profile', [TeacherProfile::class, 'update'])->name('profile.update');
+        Route::put('/profile/password', [TeacherProfile::class, 'updatePassword'])->name('profile.password');
         Route::get('/messages', [MessageInboxController::class, 'index'])->name('messages.index');
         Route::get('/messages/{recipient}', [MessageInboxController::class, 'show'])->name('messages.show');
         Route::get('/homework', [TeacherHomework::class, 'index'])->name('homework.index');

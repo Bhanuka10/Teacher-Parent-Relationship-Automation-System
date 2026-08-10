@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Models\TeacherProfile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -12,8 +13,9 @@ class ProfileController extends Controller
     {
         $teacher = auth()->user();
         $profile = $teacher->teacherProfile;
+        $schoolClass = $teacher->schoolClass()->withCount('students')->first();
 
-        return view('teacher.profile', compact('teacher', 'profile'));
+        return view('teacher.profile', compact('teacher', 'profile', 'schoolClass'));
     }
 
     public function update(Request $request)
@@ -32,6 +34,25 @@ class ProfileController extends Controller
             $validated
         );
 
-        return back()->with('success', 'Teacher profile updated successfully.');
+        return back()->with('success', 'Profile updated successfully.');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required'],
+            'password' => ['required', 'min:6', 'confirmed'],
+        ]);
+
+        $user = auth()->user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect.']);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return back()->with('success', 'Password changed successfully.');
     }
 }
