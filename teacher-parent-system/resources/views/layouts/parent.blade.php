@@ -60,6 +60,14 @@
                 </svg>
                 <span class="app-sidebar-text">Messages @if($unreadMessages)<span class="ml-1 rounded-full bg-orange-500 px-1.5 py-0.5 text-[10px] text-white">{{ $unreadMessages }}</span>@endif</span>
             </a>
+
+            <a href="{{ route('parent.results.index') }}" title="Results"
+               class="app-sidebar-link {{ request()->routeIs('parent.results.*') ? 'bg-orange-700 text-white' : 'text-orange-200 hover:bg-orange-800 hover:text-white' }}">
+                <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 17v-5.5M12 17V7M16 17v-3.5M4.75 4.75h14.5v14.5H4.75V4.75Z" />
+                </svg>
+                <span class="app-sidebar-text">Results</span>
+            </a>
         </nav>
 
         {{-- Logout --}}

@@ -18,6 +18,10 @@ use App\Http\Controllers\MessageInboxController;
 use App\Http\Controllers\Teacher\HomeworkController as TeacherHomework;
 use App\Http\Controllers\Parent\HomeworkController as ParentHomework;
 use App\Http\Controllers\Admin\HomeworkController as AdminHomework;
+use App\Http\Controllers\Teacher\ExamController as TeacherExam;
+use App\Http\Controllers\Admin\ExamController as AdminExam;
+use App\Http\Controllers\Admin\GradingSchemeController;
+use App\Http\Controllers\Parent\ResultController as ParentResult;
 
 // Root: send guests to login, and already-authenticated users straight to
 // their dashboard. This must NOT sit behind the `guest` middleware — Laravel's
@@ -66,6 +70,12 @@ Route::middleware(['auth', 'admin'])
         Route::get('/messages/{message}', [AdminMessage::class, 'show'])->name('messages.show');
         Route::get('/homework', [AdminHomework::class, 'index'])->name('homework.index');
         Route::get('/homework/{homework}', [AdminHomework::class, 'show'])->name('homework.show');
+        Route::get('/exams', [AdminExam::class, 'index'])->name('exams.index');
+        Route::get('/exams/{exam}', [AdminExam::class, 'show'])->name('exams.show');
+        Route::get('/grading-scheme', [GradingSchemeController::class, 'index'])->name('grading-scheme.index');
+        Route::post('/grading-scheme', [GradingSchemeController::class, 'store'])->name('grading-scheme.store');
+        Route::put('/grading-scheme/{gradingSchemeBand}', [GradingSchemeController::class, 'update'])->name('grading-scheme.update');
+        Route::delete('/grading-scheme/{gradingSchemeBand}', [GradingSchemeController::class, 'destroy'])->name('grading-scheme.destroy');
         Route::post('users/import', [UserController::class, 'import'])->name('users.import');
         Route::resource('users',    UserController::class);
         Route::patch('classes/{school_class}/remove-teacher', [ClassController::class, 'removeTeacher'])->name('classes.remove-teacher');
@@ -96,6 +106,14 @@ Route::middleware(['auth', 'teacher'])
         Route::put('/homework/{homework}', [TeacherHomework::class, 'update'])->name('homework.update');
         Route::put('/homework/{homework}/submissions/{submission}', [TeacherHomework::class, 'grade'])->name('homework.grade');
         Route::delete('/homework/{homework}', [TeacherHomework::class, 'destroy'])->name('homework.destroy');
+        Route::get('/exams', [TeacherExam::class, 'index'])->name('exams.index');
+        Route::get('/exams/create', [TeacherExam::class, 'create'])->name('exams.create');
+        Route::post('/exams', [TeacherExam::class, 'store'])->name('exams.store');
+        Route::get('/exams/{exam}', [TeacherExam::class, 'show'])->name('exams.show');
+        Route::get('/exams/{exam}/edit', [TeacherExam::class, 'edit'])->name('exams.edit');
+        Route::put('/exams/{exam}', [TeacherExam::class, 'update'])->name('exams.update');
+        Route::put('/exams/{exam}/marks', [TeacherExam::class, 'saveMarks'])->name('exams.marks.save');
+        Route::delete('/exams/{exam}', [TeacherExam::class, 'destroy'])->name('exams.destroy');
     });
 
 // Parent routes
@@ -114,4 +132,6 @@ Route::middleware(['auth', 'parent'])
         Route::post('/homework/{homework}/submit', [ParentHomework::class, 'submitFile'])->name('homework.submit');
         Route::post('/homework/{homework}/start', [ParentHomework::class, 'startQuiz'])->name('homework.start');
         Route::post('/homework/{homework}/answer', [ParentHomework::class, 'submitQuiz'])->name('homework.answer');
+        Route::get('/results', [ParentResult::class, 'index'])->name('results.index');
+        Route::get('/results/{exam}', [ParentResult::class, 'show'])->name('results.show');
     });

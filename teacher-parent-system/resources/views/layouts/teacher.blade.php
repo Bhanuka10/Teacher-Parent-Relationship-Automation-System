@@ -68,6 +68,14 @@
                 <span class="app-sidebar-text">Homework @if($toGradeCount)<span class="ml-1 rounded-full bg-rose-500 px-1.5 py-0.5 text-[10px] text-white">{{ $toGradeCount }}</span>@endif</span>
             </a>
 
+            <a href="{{ route('teacher.exams.index') }}" title="Exams"
+               class="app-sidebar-link {{ request()->routeIs('teacher.exams.*') ? 'bg-teal-700 text-white' : 'text-teal-200 hover:bg-teal-800 hover:text-white' }}">
+                <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 17v-5.5M12 17V7M16 17v-3.5M4.75 4.75h14.5v14.5H4.75V4.75Z" />
+                </svg>
+                <span class="app-sidebar-text">Exams</span>
+            </a>
+
             @php($unreadMessages = \App\Models\MessageRecipient::where('user_id', auth()->id())->whereNull('read_at')->count())
             <a href="{{ route('teacher.messages.index') }}" title="Messages{{ $unreadMessages ? ' ('.$unreadMessages.' unread)' : '' }}"
                class="app-sidebar-link {{ request()->routeIs('teacher.messages.*') ? 'bg-teal-700 text-white' : 'text-teal-200 hover:bg-teal-800 hover:text-white' }}">

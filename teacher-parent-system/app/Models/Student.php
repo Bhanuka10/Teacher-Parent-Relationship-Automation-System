@@ -43,4 +43,9 @@ class Student extends Model
     {
         return $this->hasMany(HomeworkSubmission::class);
     }
+
+    public function examMarks()
+    {
+        return $this->hasMany(ExamMark::class);
+    }
 }

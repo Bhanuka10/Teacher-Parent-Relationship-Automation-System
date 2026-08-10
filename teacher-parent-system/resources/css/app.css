@@ -380,7 +380,49 @@
     .ui-submit-btn:hover { box-shadow: 0 6px 20px rgba(79,70,229,.38); transform: translateY(-1px); }
     .ui-submit-btn:disabled { opacity: .6; cursor: default; transform: none; box-shadow: none; }
 
+    /* ── Exam results additions ── */
+
+    .ui-rank-badge {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 34px; height: 34px; flex-shrink: 0; border-radius: 999px;
+        font-size: 13px; font-weight: 800;
+    }
+    .ui-rank-1 { background: linear-gradient(135deg, #fde68a, #f59e0b); color: #78350f; box-shadow: 0 3px 10px rgba(245,158,11,.35); }
+    .ui-rank-2 { background: linear-gradient(135deg, #e5e7eb, #9ca3af); color: #374151; box-shadow: 0 3px 10px rgba(107,114,128,.28); }
+    .ui-rank-3 { background: linear-gradient(135deg, #fdba8c, #b45309); color: #fff; box-shadow: 0 3px 10px rgba(180,83,9,.28); }
+    .ui-rank-other { background: #eef2ff; color: #4338ca; }
+    .ui-rank-none { background: #f3f4f6; color: #9ca3af; font-size: 11px; font-weight: 600; }
+
+    .ui-trend-pill {
+        display: inline-flex; align-items: center; gap: 3px; border-radius: 999px;
+        padding: 3px 9px; font-size: 11.5px; font-weight: 700;
+    }
+    .ui-trend-pill svg { width: 11px; height: 11px; }
+    .ui-trend-up   { background: #dcfce7; color: #15803d; }
+    .ui-trend-down { background: #fee2e2; color: #b91c1c; }
+    .ui-trend-flat { background: #f3f4f6; color: #6b7280; }
+
+    .ui-grid-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    .ui-stat-card {
+        background: #fff; border-radius: 14px; border: 1px solid #e5e7eb;
+        padding: 16px 18px; box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    }
+    .ui-stat-label { font-size: .72rem; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: .04em; }
+    .ui-stat-value { font-size: 1.5rem; font-weight: 800; color: #111827; margin-top: 4px; }
+
+    @keyframes ui-fade-slide-in {
+        from { opacity: 0; transform: translateY(10px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .ui-animate-in { animation: ui-fade-slide-in .45s ease both; }
+    .ui-animate-in-1 { animation-delay: .05s; }
+    .ui-animate-in-2 { animation-delay: .1s; }
+    .ui-animate-in-3 { animation-delay: .15s; }
+    .ui-animate-in-4 { animation-delay: .2s; }
+
     @media (prefers-reduced-motion: reduce) {
         .ui-progress-fill, .ui-tab-btn, .ui-chip, .ui-submit-btn, .ui-back { transition: none; }
+        .ui-animate-in, .ui-animate-in-1, .ui-animate-in-2, .ui-animate-in-3, .ui-animate-in-4 { animation: none; }
     }
 }

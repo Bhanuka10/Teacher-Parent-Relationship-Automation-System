@@ -27,4 +27,9 @@ class SchoolClass extends Model
     {
         return $this->hasMany(Homework::class);
     }
+
+    public function exams()
+    {
+        return $this->hasMany(Exam::class);
+    }
 }
