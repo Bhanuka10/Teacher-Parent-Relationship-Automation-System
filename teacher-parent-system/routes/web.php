@@ -15,6 +15,9 @@ use App\Http\Controllers\Parent\DashboardController as ParentDash;
 use App\Http\Controllers\Parent\ProfileController;
 use App\Http\Controllers\Admin\MessageController as AdminMessage;
 use App\Http\Controllers\MessageInboxController;
+use App\Http\Controllers\Teacher\HomeworkController as TeacherHomework;
+use App\Http\Controllers\Parent\HomeworkController as ParentHomework;
+use App\Http\Controllers\Admin\HomeworkController as AdminHomework;
 
 // Root: send guests to login, and already-authenticated users straight to
 // their dashboard. This must NOT sit behind the `guest` middleware — Laravel's
@@ -61,6 +64,8 @@ Route::middleware(['auth', 'admin'])
         Route::get('/messages', [AdminMessage::class, 'index'])->name('messages.index');
         Route::post('/messages', [AdminMessage::class, 'store'])->name('messages.store');
         Route::get('/messages/{message}', [AdminMessage::class, 'show'])->name('messages.show');
+        Route::get('/homework', [AdminHomework::class, 'index'])->name('homework.index');
+        Route::get('/homework/{homework}', [AdminHomework::class, 'show'])->name('homework.show');
         Route::post('users/import', [UserController::class, 'import'])->name('users.import');
         Route::resource('users',    UserController::class);
         Route::patch('classes/{school_class}/remove-teacher', [ClassController::class, 'removeTeacher'])->name('classes.remove-teacher');
@@ -83,6 +88,14 @@ Route::middleware(['auth', 'teacher'])
         Route::put('/profile', [TeacherProfile::class, 'update'])->name('profile.update');
         Route::get('/messages', [MessageInboxController::class, 'index'])->name('messages.index');
         Route::get('/messages/{recipient}', [MessageInboxController::class, 'show'])->name('messages.show');
+        Route::get('/homework', [TeacherHomework::class, 'index'])->name('homework.index');
+        Route::get('/homework/create', [TeacherHomework::class, 'create'])->name('homework.create');
+        Route::post('/homework', [TeacherHomework::class, 'store'])->name('homework.store');
+        Route::get('/homework/{homework}', [TeacherHomework::class, 'show'])->name('homework.show');
+        Route::get('/homework/{homework}/edit', [TeacherHomework::class, 'edit'])->name('homework.edit');
+        Route::put('/homework/{homework}', [TeacherHomework::class, 'update'])->name('homework.update');
+        Route::put('/homework/{homework}/submissions/{submission}', [TeacherHomework::class, 'grade'])->name('homework.grade');
+        Route::delete('/homework/{homework}', [TeacherHomework::class, 'destroy'])->name('homework.destroy');
     });
 
 // Parent routes
@@ -96,4 +109,9 @@ Route::middleware(['auth', 'parent'])
         Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
         Route::get('/messages', [MessageInboxController::class, 'index'])->name('messages.index');
         Route::get('/messages/{recipient}', [MessageInboxController::class, 'show'])->name('messages.show');
+        Route::get('/homework', [ParentHomework::class, 'index'])->name('homework.index');
+        Route::get('/homework/{homework}', [ParentHomework::class, 'show'])->name('homework.show');
+        Route::post('/homework/{homework}/submit', [ParentHomework::class, 'submitFile'])->name('homework.submit');
+        Route::post('/homework/{homework}/start', [ParentHomework::class, 'startQuiz'])->name('homework.start');
+        Route::post('/homework/{homework}/answer', [ParentHomework::class, 'submitQuiz'])->name('homework.answer');
     });

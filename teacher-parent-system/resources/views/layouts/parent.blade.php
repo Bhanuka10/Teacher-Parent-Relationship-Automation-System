@@ -43,6 +43,15 @@
                 <span class="app-sidebar-text">My Profile</span>
             </a>
 
+            @php($dueHomeworkCount = \App\Models\HomeworkSubmission::whereHas('student', fn ($q) => $q->where('parent_id', auth()->id()))->whereNull('submitted_at')->whereHas('homework', fn ($q) => $q->whereNull('due_at')->orWhere('due_at', '>', now()))->count())
+            <a href="{{ route('parent.homework.index') }}" title="Homework{{ $dueHomeworkCount ? ' ('.$dueHomeworkCount.' due)' : '' }}"
+               class="app-sidebar-link {{ request()->routeIs('parent.homework.*') ? 'bg-orange-700 text-white' : 'text-orange-200 hover:bg-orange-800 hover:text-white' }}">
+                <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <span class="app-sidebar-text">Homework @if($dueHomeworkCount)<span class="ml-1 rounded-full bg-rose-500 px-1.5 py-0.5 text-[10px] text-white">{{ $dueHomeworkCount }}</span>@endif</span>
+            </a>
+
             @php($unreadMessages = \App\Models\MessageRecipient::where('user_id', auth()->id())->whereNull('read_at')->count())
             <a href="{{ route('parent.messages.index') }}" title="Messages{{ $unreadMessages ? ' ('.$unreadMessages.' unread)' : '' }}"
                class="app-sidebar-link {{ request()->routeIs('parent.messages.*') ? 'bg-orange-700 text-white' : 'text-orange-200 hover:bg-orange-800 hover:text-white' }}">
@@ -90,5 +99,6 @@
         @yield('content')
     </main>
 
+    @stack('scripts')
 </body>
 </html>

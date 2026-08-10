@@ -239,4 +239,148 @@
         border-radius: 8px;
         font-size: 13.5px;
     }
+
+    /* ── Shared page primitives (.ui-*) ──
+       Generic versions of the card/tag/progress/pill/avatar language first
+       built for the Messages feature (there as page-local .msg-* classes).
+       Centralized here because Homework's ~8 new pages would otherwise
+       triplicate that CSS a third time. The original .msg-* blocks are left
+       untouched on purpose — nothing there needs to change to get this. */
+
+    .ui-hero-icon {
+        width: 46px; height: 46px; flex-shrink: 0; border-radius: 14px;
+        display: flex; align-items: center; justify-content: center; color: #fff;
+    }
+    .ui-hero-icon svg { width: 22px; height: 22px; }
+    .ui-hero-indigo { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); box-shadow: 0 4px 14px rgba(79,70,229,.28); }
+    .ui-hero-teal   { background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%); box-shadow: 0 4px 14px rgba(15,118,110,.28); }
+    .ui-hero-orange { background: linear-gradient(135deg, #c2410c 0%, #f97316 100%); box-shadow: 0 4px 14px rgba(194,65,12,.28); }
+
+    .ui-card {
+        background: #fff; border-radius: 16px; border: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    }
+    .ui-card-header {
+        display: flex; align-items: center; gap: 14px; padding: 22px 24px;
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    }
+    .ui-card-header-icon {
+        width: 40px; height: 40px; flex-shrink: 0; border-radius: 11px;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(255,255,255,.16); color: #fff;
+    }
+    .ui-card-header-icon svg { width: 20px; height: 20px; }
+    .ui-card-header-title { font-size: .98rem; font-weight: 700; color: #fff; }
+    .ui-card-header-sub { font-size: .76rem; color: rgba(255,255,255,.75); margin-top: 1px; }
+
+    .ui-back {
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: .8rem; font-weight: 500; color: #4f46e5; text-decoration: none; transition: color .15s;
+    }
+    .ui-back:hover { color: #3730a3; }
+    .ui-back svg { width: 14px; height: 14px; }
+
+    .ui-tag {
+        display: inline-flex; align-items: center; border-radius: 999px; padding: 3px 10px;
+        font-size: 11px; font-weight: 700; letter-spacing: .02em; white-space: nowrap;
+    }
+    .ui-tag-indigo { background: #e0e7ff; color: #4338ca; }
+    .ui-tag-orange { background: #ffedd5; color: #c2410c; }
+    .ui-tag-teal   { background: #ccfbf1; color: #0f766e; }
+    .ui-tag-rose   { background: #ffe4e6; color: #be123c; }
+    .ui-tag-gray   { background: #f3f4f6; color: #4b5563; }
+
+    .ui-progress {
+        display: block; height: 6px; border-radius: 999px; background: #f3f4f6; overflow: hidden;
+    }
+    .ui-progress-fill {
+        display: block; height: 100%; border-radius: 999px;
+        background: linear-gradient(90deg, #818cf8, #6366f1);
+        transition: width .4s ease;
+    }
+
+    .ui-status-pill {
+        display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;
+        border-radius: 999px; padding: 4px 10px; font-size: 11.5px; font-weight: 700; white-space: nowrap;
+    }
+    .ui-status-pill svg { width: 12px; height: 12px; }
+    .ui-status-pending   { background: #fef3c7; color: #92400e; } /* not submitted yet */
+    .ui-status-submitted { background: #dbeafe; color: #1d4ed8; } /* submitted, awaiting grade */
+    .ui-status-graded    { background: #dcfce7; color: #15803d; }
+    .ui-status-expired   { background: #fee2e2; color: #b91c1c; }
+
+    .ui-avatar {
+        width: 34px; height: 34px; flex-shrink: 0; border-radius: 999px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 12px; font-weight: 700;
+    }
+    .ui-avatar-indigo { background: #e0e7ff; color: #4338ca; }
+    .ui-avatar-orange { background: #ffedd5; color: #c2410c; }
+    .ui-avatar-teal   { background: #ccfbf1; color: #0f766e; }
+
+    .ui-empty { padding: 56px 24px; text-align: center; color: #9ca3af; }
+    .ui-empty svg { width: 44px; height: 44px; margin: 0 auto 12px; opacity: .35; }
+    .ui-empty p { font-size: 13.5px; }
+    .ui-empty-sub { font-size: 12px; margin-top: 3px; color: #c1c5cc; }
+
+    /* Segmented control / toggle chip, driven by a hidden radio or checkbox
+       via :has(:checked) — no JS needed for the visual state. */
+    .ui-tab-bar { display: inline-flex; background: #f3f4f6; border-radius: 10px; padding: 3px; gap: 2px; }
+    .ui-tab-btn {
+        padding: 7px 16px; border-radius: 8px; font-size: .8rem; font-weight: 600;
+        color: #6b7280; cursor: pointer; transition: all .15s; user-select: none;
+    }
+    .ui-tab-btn:has(:checked) { background: #fff; color: #4338ca; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+    .ui-tab-btn:hover:not(:has(:checked)) { color: #374151; }
+
+    .ui-chip {
+        display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 8px;
+        font-size: .82rem; color: #374151; cursor: pointer; transition: background .12s;
+        border: 1px solid transparent;
+    }
+    .ui-chip:hover { background: #fff; }
+    .ui-chip:has(:checked) { background: #eef2ff; border-color: #c7d2fe; color: #4338ca; font-weight: 600; }
+
+    .ui-option-card {
+        display: flex; align-items: center; gap: 10px;
+        border: 1.5px solid #e5e7eb; border-radius: 12px; padding: 12px;
+        cursor: pointer; transition: border-color .15s, background .15s, transform .15s;
+    }
+    .ui-option-card:hover { border-color: #c7d2fe; background: #fafafe; transform: translateY(-1px); }
+    .ui-option-card:has(:checked) { border-color: #6366f1; background: #eef2ff; }
+    .ui-option-icon {
+        width: 34px; height: 34px; flex-shrink: 0; border-radius: 9px;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .ui-option-icon svg { width: 18px; height: 18px; }
+    .ui-option-check {
+        width: 18px; height: 18px; flex-shrink: 0; border-radius: 999px;
+        border: 1.5px solid #d1d5db; background: #fff;
+        display: flex; align-items: center; justify-content: center; color: transparent;
+        transition: background .15s, border-color .15s, color .15s;
+    }
+    .ui-option-check svg { width: 11px; height: 11px; }
+    .ui-option-card:has(:checked) .ui-option-check { background: #6366f1; border-color: #6366f1; color: #fff; }
+
+    .ui-field-label { font-size: .78rem; font-weight: 600; color: #374151; margin-bottom: 8px; display: block; }
+
+    .ui-input {
+        width: 100%; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 10px 13px;
+        font-size: .875rem; color: #111827; background: #fafafa;
+        transition: border-color .15s, box-shadow .15s, background .15s; outline: none; box-sizing: border-box;
+    }
+    .ui-input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.12); background: #fff; }
+
+    .ui-submit-btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: #fff;
+        border: none; border-radius: 11px; padding: 12px 20px; font-size: .88rem; font-weight: 600;
+        cursor: pointer; transition: all .2s; box-shadow: 0 4px 14px rgba(79,70,229,.28);
+    }
+    .ui-submit-btn:hover { box-shadow: 0 6px 20px rgba(79,70,229,.38); transform: translateY(-1px); }
+    .ui-submit-btn:disabled { opacity: .6; cursor: default; transform: none; box-shadow: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+        .ui-progress-fill, .ui-tab-btn, .ui-chip, .ui-submit-btn, .ui-back { transition: none; }
+    }
 }

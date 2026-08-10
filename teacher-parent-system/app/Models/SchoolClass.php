@@ -22,4 +22,9 @@ class SchoolClass extends Model
     {
         return $this->hasManyThrough(Attendance::class, Student::class, 'school_class_id', 'student_id');
     }
+
+    public function homeworks()
+    {
+        return $this->hasMany(Homework::class);
+    }
 }

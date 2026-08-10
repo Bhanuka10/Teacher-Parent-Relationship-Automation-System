@@ -67,6 +67,14 @@
                 <span class="app-sidebar-text">Attendance</span>
             </a>
 
+            <a href="{{ route('admin.homework.index') }}" title="Homework"
+               class="app-sidebar-link {{ request()->routeIs('admin.homework.*') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white' }}">
+                <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <span class="app-sidebar-text">Homework</span>
+            </a>
+
             <a href="{{ route('admin.messages.index') }}" title="Messages"
                class="app-sidebar-link {{ request()->routeIs('admin.messages.*') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white' }}">
                 <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
