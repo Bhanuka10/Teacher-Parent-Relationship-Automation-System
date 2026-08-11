@@ -12,7 +12,7 @@
     /* ── KPI stat cards (identical to the dashboard's kit) ── */
     .kpi-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         gap: 16px;
         margin-bottom: 24px;
     }
@@ -39,6 +39,26 @@
         background: #fff; border: 1px solid #e5e7eb; border-radius: 14px;
         overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.04);
     }
+
+    /* ── two-column content layout (same ratio as the dashboard) ── */
+    .content-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; align-items: start; }
+    @media (max-width: 900px) { .content-grid { grid-template-columns: 1fr; } }
+
+    /* ── sidebar timeline (mirrors the profile page's Account Overview card) ── */
+    .pf-card-header {
+        display: flex; align-items: center; gap: 10px; padding: 16px 22px;
+        border-bottom: 1px solid #f3f4f6;
+    }
+    .pf-card-header svg { width: 16px; height: 16px; color: var(--p-accent); }
+    .pf-card-title { font-size: 13.5px; font-weight: 800; color: #111827; }
+    .pf-stat-row {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 12px 0; border-bottom: 1px solid #f3f4f6; font-size: 12.5px;
+    }
+    .pf-stat-row:last-child { border-bottom: none; }
+    .pf-stat-label { color: #6b7280; display: flex; align-items: center; gap: 7px; }
+    .pf-stat-label svg { width: 14px; height: 14px; color: #9ca3af; flex-shrink: 0; }
+    .pf-stat-value { font-weight: 700; color: #111827; text-align: right; }
 </style>
 @endpush
 
@@ -51,7 +71,7 @@
         'expired'   => ['label' => 'Expired', 'icon' => 'red'],
     ][$submission->status()];
 @endphp
-<div class="mx-auto max-w-3xl">
+<div class="max-w-7xl">
     <a href="{{ route('parent.homework.index') }}" class="ui-back" style="color:#c2410c">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
         Back to homework
@@ -66,7 +86,7 @@
     </section>
 
     {{-- ═══════ QUICK FACTS ═══════ --}}
-    <div class="kpi-grid ui-animate-in ui-animate-in-1">
+    <div class="kpi-grid mt-4 ui-animate-in ui-animate-in-1">
         <div class="kpi-card">
             <div class="kpi-icon {{ $statusMeta['icon'] }}">
                 <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5.75 12.5 9.5 16.25 18.25 7.75M4.75 5.75h14.5v12.5H4.75V5.75Z"/></svg>
@@ -107,10 +127,12 @@
         @endif
     </div>
 
+    <div class="content-grid mt-6">
+    <div>
     @if($submission->isGraded())
         {{-- ═══════ GRADED RESULT (both types) ═══════ --}}
         @php $pct = $homework->max_marks > 0 ? round(($submission->marks / $homework->max_marks) * 100) : 0; @endphp
-        <section class="section-card ui-animate-in ui-animate-in-2 mt-6 overflow-hidden">
+        <section class="section-card ui-animate-in ui-animate-in-2 overflow-hidden">
             <div class="flex items-center justify-between border-b border-gray-100 px-6 py-4">
                 <h2 class="font-bold text-gray-800">Your Result</h2>
                 <span class="ui-tag ui-tag-orange" style="font-size:13px;padding:5px 12px">{{ $submission->marks }}/{{ $homework->max_marks }}</span>
@@ -152,7 +174,7 @@
 
     @elseif($homework->type === 'file')
         {{-- ═══════ FILE SUBMISSION ═══════ --}}
-        <section class="section-card ui-animate-in ui-animate-in-2 mt-6 overflow-hidden">
+        <section class="section-card ui-animate-in ui-animate-in-2 overflow-hidden">
             <div class="border-b border-gray-100 px-6 py-4">
                 <h2 class="font-bold text-gray-800">{{ $submission->isSubmitted() ? 'Your Submission' : 'Submit Your Work' }}</h2>
             </div>
@@ -192,18 +214,18 @@
     @else
         {{-- ═══════ QUIZ ═══════ --}}
         @if($submission->isSubmitted())
-            <section class="section-card ui-animate-in ui-animate-in-2 mt-6 p-6">
+            <section class="section-card ui-animate-in ui-animate-in-2 p-6">
                 <div class="ui-status-pill ui-status-submitted" style="display:inline-flex">Submitted — awaiting grading</div>
                 <p class="mt-3 text-sm text-gray-500">Your teacher will review the written questions and release your final mark and feedback here.</p>
             </section>
         @elseif($submission->started_at && $submission->isExpired())
-            <section class="section-card ui-animate-in ui-animate-in-2 mt-6 p-6">
+            <section class="section-card ui-animate-in ui-animate-in-2 p-6">
                 <div class="ui-status-pill ui-status-expired" style="display:inline-flex">Time expired</div>
                 <p class="mt-3 text-sm text-gray-500">Your attempt ran out of time before it was submitted.</p>
             </section>
         @elseif($submission->started_at)
             {{-- IN PROGRESS --}}
-            <section class="section-card ui-animate-in ui-animate-in-2 mt-6 p-6">
+            <section class="section-card ui-animate-in ui-animate-in-2 p-6">
                 <div class="flex items-center justify-between rounded-lg bg-rose-50 px-4 py-2.5">
                     <span class="text-sm font-semibold text-rose-700">Time remaining</span>
                     <span id="quiz-timer" class="font-mono text-lg font-bold text-rose-700">--:--</span>
@@ -234,11 +256,11 @@
                 </form>
             </section>
         @elseif($homework->isPastDue())
-            <section class="section-card ui-animate-in ui-animate-in-2 mt-6 p-6">
+            <section class="section-card ui-animate-in ui-animate-in-2 p-6">
                 <div class="ui-status-pill ui-status-expired" style="display:inline-flex">This quiz is closed</div>
             </section>
         @else
-            <section class="section-card ui-animate-in ui-animate-in-2 mt-6 p-6 text-center">
+            <section class="section-card ui-animate-in ui-animate-in-2 p-6 text-center">
                 <p class="text-sm text-gray-600">{{ $homework->questions->count() }} question(s) · {{ $homework->duration_minutes }} minutes once you start · {{ $homework->max_marks }} marks total</p>
                 <p class="mt-1 text-xs text-gray-400">The timer starts the moment you click Start — make sure you're ready.</p>
                 <form method="POST" action="{{ route('parent.homework.start', $homework) }}" class="mt-4">
@@ -248,6 +270,61 @@
             </section>
         @endif
     @endif
+    </div>
+
+    {{-- ── Right: timeline sidebar ── --}}
+    <div class="flex flex-col gap-6">
+        <section class="section-card ui-animate-in ui-animate-in-2">
+            <div class="pf-card-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>
+                <span class="pf-card-title">Timeline</span>
+            </div>
+            <div class="p-6" style="padding-top:6px;padding-bottom:6px">
+                <div class="pf-stat-row">
+                    <span class="pf-stat-label">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 13.25a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM5.75 19.25c.8-2.56 3.08-4.25 6.25-4.25s5.45 1.69 6.25 4.25"/></svg>
+                        Assigned by
+                    </span>
+                    <span class="pf-stat-value">{{ $homework->teacher?->name ?? '—' }}</span>
+                </div>
+                <div class="pf-stat-row">
+                    <span class="pf-stat-label">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="4.75" y="5.75" width="14.5" height="13.5" rx="1.75"/><path d="M8 3.5v4.5M16 3.5v4.5M4.75 10h14.5"/></svg>
+                        Assigned
+                    </span>
+                    <span class="pf-stat-value">{{ $homework->created_at->format('d M Y') }}</span>
+                </div>
+                @if($submission->started_at)
+                    <div class="pf-stat-row">
+                        <span class="pf-stat-label">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 5v14l11-7L8 5Z"/></svg>
+                            Started
+                        </span>
+                        <span class="pf-stat-value">{{ $submission->started_at->format('d M, h:i A') }}</span>
+                    </div>
+                @endif
+                @if($submission->submitted_at)
+                    <div class="pf-stat-row">
+                        <span class="pf-stat-label">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21V8m0 0 4 4m-4-4-4 4M4 4h16"/></svg>
+                            Submitted
+                        </span>
+                        <span class="pf-stat-value">{{ $submission->submitted_at->format('d M, h:i A') }}</span>
+                    </div>
+                @endif
+                @if($submission->graded_at)
+                    <div class="pf-stat-row">
+                        <span class="pf-stat-label">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5.75 12.5 9.5 16.25 18.25 7.75M4.75 5.75h14.5v12.5H4.75V5.75Z"/></svg>
+                            Graded
+                        </span>
+                        <span class="pf-stat-value">{{ $submission->graded_at->format('d M, h:i A') }}</span>
+                    </div>
+                @endif
+            </div>
+        </section>
+    </div>
+    </div>
 </div>
 @endsection
 

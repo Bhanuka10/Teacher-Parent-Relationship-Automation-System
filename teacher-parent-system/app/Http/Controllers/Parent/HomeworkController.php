@@ -33,7 +33,7 @@ class HomeworkController extends Controller
     {
         [$student, $submission] = $this->resolve($homework);
 
-        $homework->load('questions.options');
+        $homework->load('questions.options', 'teacher');
         $submission->load('answers');
 
         return view('parent.homework.show', compact('homework', 'student', 'submission'));

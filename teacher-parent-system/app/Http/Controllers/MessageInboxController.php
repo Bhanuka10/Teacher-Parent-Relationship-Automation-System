@@ -14,16 +14,17 @@ class MessageInboxController extends Controller
             ->latest('created_at')
             ->paginate(15);
 
-        if ($request->user()->isTeacher()) {
-            $unreadCount = MessageRecipient::where('user_id', $request->user()->id)
-                ->whereNull('read_at')
-                ->count();
+        $unreadCount = MessageRecipient::where('user_id', $request->user()->id)
+            ->whereNull('read_at')
+            ->count();
 
+        if ($request->user()->isTeacher()) {
             return view('teacher.messages.inbox', compact('recipients', 'unreadCount'));
         }
 
         return view('messages.inbox', [
             'recipients' => $recipients,
+            'unreadCount' => $unreadCount,
             'layout' => 'layouts.parent',
             'portalLabel' => 'Student',
         ]);

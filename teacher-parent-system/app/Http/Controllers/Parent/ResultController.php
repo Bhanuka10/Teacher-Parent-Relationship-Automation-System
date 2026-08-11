@@ -12,7 +12,7 @@ class ResultController extends Controller
 
     public function index()
     {
-        $student = auth()->user()->students()->first();
+        $student = auth()->user()->students()->with('schoolClass')->first();
 
         if (!$student || !$student->schoolClass) {
             return view('parent.results.index', ['student' => $student, 'history' => collect()]);
