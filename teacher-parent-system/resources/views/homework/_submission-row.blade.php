@@ -87,7 +87,7 @@
 
     @if($canGrade && $submission->isSubmitted())
         <form method="POST" action="{{ route('teacher.homework.grade', [$homework, $submission]) }}"
-              class="hidden mt-3 flex flex-wrap items-end gap-3 rounded-lg border border-indigo-100 bg-indigo-50/50 p-3"
+              class="hidden mt-3 flex-wrap items-end gap-3 rounded-lg border border-indigo-100 bg-indigo-50/50 p-3"
               id="grade-panel-{{ $submission->id }}">
             @csrf
             @method('PUT')

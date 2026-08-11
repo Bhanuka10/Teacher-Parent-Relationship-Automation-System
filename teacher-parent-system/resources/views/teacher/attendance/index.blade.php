@@ -3,126 +3,177 @@
 
 @push('styles')
 <style>
-    /* ── Mark Attendance page ── */
-    .att-ghost-btn {
-        display: inline-flex; align-items: center; gap: 6px;
-        background: #fff; border: 1px solid #e5e7eb; color: #0f766e;
-        font-size: .82rem; font-weight: 600; padding: 9px 16px; border-radius: 10px;
-        text-decoration: none; transition: all .15s;
+    :root {
+        --t-accent:       #0f766e;
+        --t-accent-light: #ccfbf1;
+        --t-accent-mid:   #14b8a6;
     }
-    .att-ghost-btn:hover { background: #f0fdfa; border-color: #99f6e4; }
-    .att-ghost-btn svg { width: 15px; height: 15px; }
 
-    .att-stat-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
-    .att-stat-icon {
-        width: 30px; height: 30px; border-radius: 9px; flex-shrink: 0;
+    .db-title { font-size: 22px; font-weight: 800; color: #111827; margin: 0 0 2px; }
+    .db-sub   { font-size: 13px; color: #6b7280; margin: 0; }
+    .db-sub span { color: var(--t-accent); font-weight: 600; }
+
+    .db-head {
+        display: flex; align-items: flex-start; justify-content: space-between;
+        flex-wrap: wrap; gap: 14px; margin-bottom: 26px;
+    }
+
+    .quick-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .qa-btn {
+        display: inline-flex; align-items: center; gap: 7px;
+        padding: 9px 16px; border-radius: 10px;
+        font-size: 12.5px; font-weight: 700;
+        text-decoration: none; transition: all .15s;
+        border: 1.5px solid transparent; cursor: pointer;
+    }
+    .qa-btn svg { width: 15px; height: 15px; }
+    .qa-btn.primary { background: var(--t-accent); color: #fff; box-shadow: 0 4px 14px rgba(15,118,110,.28); }
+    .qa-btn.primary:hover { background: #0d5f58; transform: translateY(-1px); }
+    .qa-btn.ghost { background: #fff; color: var(--t-accent); border-color: #d1fae5; }
+    .qa-btn.ghost:hover { background: var(--t-accent-light); border-color: var(--t-accent-mid); }
+    .qa-btn.ghost-rose { background: #fff; color: #be123c; border-color: #fecdd3; }
+    .qa-btn.ghost-rose:hover { background: #ffe4e6; border-color: #fda4af; }
+
+    /* ── KPI stat cards ── */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    .kpi-card {
+        background: #fff; border: 1px solid #e5e7eb; border-radius: 14px;
+        padding: 20px 22px; box-shadow: 0 1px 4px rgba(0,0,0,.04);
+        display: flex; align-items: center; gap: 16px;
+    }
+    .kpi-icon {
+        width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
         display: flex; align-items: center; justify-content: center;
     }
-    .att-stat-icon svg { width: 15px; height: 15px; }
-    .att-stat-icon-gray  { background: #f3f4f6; color: #6b7280; }
-    .att-stat-icon-green { background: #dcfce7; color: #15803d; }
-    .att-stat-icon-red   { background: #fee2e2; color: #b91c1c; }
-    .att-stat-icon-teal  { background: #ccfbf1; color: #0f766e; }
+    .kpi-icon.teal   { background: var(--t-accent-light); color: var(--t-accent); }
+    .kpi-icon.indigo { background: #e0e7ff; color: #4338ca; }
+    .kpi-icon.amber  { background: #fef3c7; color: #b45309; }
+    .kpi-icon.rose   { background: #ffe4e6; color: #be123c; }
+    .kpi-val   { font-size: 24px; font-weight: 800; color: #111827; line-height: 1.15; }
+    .kpi-label { font-size: 12px; color: #6b7280; margin-top: 2px; }
+    .kpi-note  { font-size: 10.5px; color: #9ca3af; margin-top: 3px; }
 
-    .att-toolbar-card {
-        background: #fff; border: 1px solid #e5e7eb; border-radius: 16px;
-        padding: 18px 20px; margin-bottom: 18px;
+    .due-banner {
+        display: flex; align-items: center; gap: 10px;
+        background: #fef2f2; border: 1px solid #fecaca;
+        border-radius: 12px; padding: 12px 16px; margin-bottom: 20px;
+        font-size: 12.5px; color: #991b1b;
+    }
+    .due-banner strong { font-weight: 800; }
+
+    /* ── toolbar ── */
+    .toolbar-card {
+        background: #fff; border: 1px solid #e5e7eb; border-radius: 14px;
+        padding: 18px 22px; box-shadow: 0 1px 4px rgba(0,0,0,.04);
         display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end;
-        box-shadow: 0 1px 3px rgba(0,0,0,.04);
+        margin-bottom: 20px;
     }
-    .att-toolbar-field label {
-        display: block; font-size: .72rem; font-weight: 600; color: #6b7280;
-        text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px;
+    .toolbar-field label {
+        display: block; font-size: 10.5px; font-weight: 700; color: #9ca3af;
+        text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px;
     }
-    .att-search-wrap { position: relative; flex: 1; min-width: 220px; }
-    .att-search-wrap svg {
-        position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-        width: 15px; height: 15px; color: #9ca3af; pointer-events: none;
+    .att-input {
+        border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 9px 13px;
+        font-size: 13px; color: #111827; background: #fafafa; outline: none;
+        transition: border-color .15s, box-shadow .15s, background .15s;
     }
-    .att-search-wrap input.ui-input { padding-left: 34px; }
+    .att-input:focus { border-color: var(--t-accent-mid); box-shadow: 0 0 0 3px rgba(20,184,166,.15); background: #fff; }
+    .att-search-wrap { position: relative; flex: 1; min-width: 200px; }
+    .att-search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: #9ca3af; }
+    .att-search-wrap input { width: 100%; padding-left: 32px; box-sizing: border-box; }
 
-    .att-mark-btn {
-        display: inline-flex; align-items: center; gap: 6px;
-        border: none; cursor: pointer; font-size: .8rem; font-weight: 600;
-        padding: 10.5px 16px; border-radius: 10px; transition: all .15s; white-space: nowrap;
+    /* ── section card / roster-style rows ── */
+    .section-card {
+        background: #fff; border: 1px solid #e5e7eb; border-radius: 14px;
+        overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.04);
     }
-    .att-mark-btn svg { width: 14px; height: 14px; }
-    .att-mark-present { background: #ccfbf1; color: #0f766e; }
-    .att-mark-present:hover { background: #99f6e4; }
-    .att-mark-absent { background: #ffe4e6; color: #be123c; }
-    .att-mark-absent:hover { background: #fecdd3; }
+    .section-header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 16px 20px; border-bottom: 1px solid #f3f4f6;
+    }
+    .section-title { font-size: 14px; font-weight: 800; color: #111827; display: flex; align-items: center; gap: 8px; }
 
     .att-row {
-        display: flex; align-items: center; justify-content: space-between; gap: 16px;
-        padding: 13px 20px; border-bottom: 1px solid #f3f4f6; transition: background .15s;
+        display: flex; align-items: center; gap: 12px; padding: 12px 20px;
+        border-bottom: 1px solid #f3f4f6; transition: background .12s;
     }
     .att-row:last-child { border-bottom: none; }
     .att-row:hover { background: #fafafa; }
-    .att-row.is-absent { background: #fef2f2; }
-    .att-row.is-absent:hover { background: #fee5e5; }
     .att-row.is-hidden { display: none; }
-
-    .att-toggle { display: inline-flex; border: 1.5px solid #e5e7eb; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
-    .att-toggle-btn {
-        display: flex; align-items: center; gap: 5px; cursor: pointer; user-select: none;
-        padding: 8px 14px; font-size: .76rem; font-weight: 700; color: #9ca3af; background: #fff;
-        transition: all .15s;
+    .roster-av {
+        width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 12px; font-weight: 700; color: #fff;
     }
-    .att-toggle-btn svg { width: 13px; height: 13px; }
-    .att-toggle-present.is-active { background: #dcfce7; color: #15803d; }
-    .att-toggle-absent.is-active { background: #fee2e2; color: #b91c1c; }
+    .roster-nm { font-size: 13px; font-weight: 600; color: #111827; }
+    .roster-adm { font-size: 11px; color: #9ca3af; }
 
-    .att-save-bar {
+    /* ── clickable status-dot toggle ── */
+    .att-toggle { display: inline-flex; gap: 8px; margin-left: auto; flex-shrink: 0; }
+    .att-toggle input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+    .status-dot {
+        display: inline-flex; align-items: center; gap: 5px; cursor: pointer; user-select: none;
+        border-radius: 20px; padding: 5px 12px; font-size: 10.5px; font-weight: 700;
+        background: #f3f4f6; color: #9ca3af; transition: all .15s; border: 1.5px solid transparent;
+    }
+    .status-dot .dot { width: 5px; height: 5px; border-radius: 50%; background: #9ca3af; }
+    .status-dot.present.is-active { background: #d1fae5; color: #065f46; border-color: #a7f3d0; }
+    .status-dot.present.is-active .dot { background: #10b981; }
+    .status-dot.absent.is-active { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
+    .status-dot.absent.is-active .dot { background: #ef4444; }
+
+    .save-bar {
         position: sticky; bottom: 0; left: 0; right: 0; margin-top: 20px; z-index: 10;
         display: flex; align-items: center; justify-content: space-between; gap: 16px;
-        background: rgba(255,255,255,.92); backdrop-filter: blur(6px);
+        background: rgba(255,255,255,.94); backdrop-filter: blur(6px);
         border: 1px solid #e5e7eb; border-radius: 14px; padding: 14px 20px;
         box-shadow: 0 -6px 20px rgba(0,0,0,.06), 0 6px 20px rgba(0,0,0,.06);
     }
-    .att-save-summary { font-size: .85rem; color: #374151; }
-    .att-save-summary strong { color: #111827; }
-    .att-no-results { display: none; padding: 40px 20px; text-align: center; color: #9ca3af; font-size: .85rem; }
+    .save-summary { font-size: 12.5px; color: #6b7280; }
+    .save-summary strong { color: #111827; }
 
     @media (max-width: 640px) {
-        .att-save-bar { flex-direction: column; align-items: stretch; text-align: center; }
+        .save-bar { flex-direction: column; align-items: stretch; text-align: center; }
     }
 </style>
 @endpush
 
 @section('content')
-<div class="mx-auto max-w-5xl">
-
-    <div class="mb-7 flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
-            <div class="ui-hero-icon ui-hero-teal">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.75 12.5 9.5 16.25 18.25 7.75M4.75 5.75h14.5v12.5H4.75V5.75Z" />
-                </svg>
-            </div>
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800">Mark Attendance</h1>
-                <p class="mt-0.5 text-sm text-gray-500">Record who's present today, one tap per student.</p>
-            </div>
+<div class="max-w-7xl">
+    <div class="db-head">
+        <div>
+            <h1 class="db-title">Mark Attendance</h1>
+            <p class="db-sub">
+                {{ \Illuminate\Support\Carbon::parse($date)->format('l, F j, Y') }} ·
+                @if($schoolClass)
+                    Class <span>{{ $schoolClass->name }}</span>
+                @else
+                    <span>No class assigned yet</span>
+                @endif
+            </p>
         </div>
-        <a href="{{ route('teacher.attendance.history') }}" class="att-ghost-btn">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l2.5 2.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-            View History
-        </a>
+        <div class="quick-actions">
+            <a href="{{ route('teacher.attendance.history') }}" class="qa-btn ghost">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l2.5 2.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+                View History
+            </a>
+        </div>
     </div>
 
     @if($errors->has('attendance'))
-        <div class="flash-error">
-            <svg style="width:15px;height:15px;flex-shrink:0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
-            </svg>
+        <div class="due-banner">
+            <svg style="width:16px;height:16px;flex-shrink:0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
             {{ $errors->first('attendance') }}
         </div>
     @endif
 
     @if(!$schoolClass)
-        <div class="ui-card">
+        <div class="section-card">
             <div class="ui-empty">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><path stroke-linecap="round" stroke-linejoin="round" d="M5.75 12.5 9.5 16.25 18.25 7.75M4.75 5.75h14.5v12.5H4.75V5.75Z"/></svg>
                 <p>No class is assigned to your account yet.</p>
@@ -130,129 +181,131 @@
             </div>
         </div>
     @else
-        {{-- Live stats --}}
-        <div class="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-5">
-            <div class="ui-stat-card ui-animate-in ui-animate-in-1">
-                <div class="att-stat-top">
-                    <p class="ui-stat-label">{{ $schoolClass->name }}</p>
-                    <span class="att-stat-icon att-stat-icon-gray">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.25a7.5 7.5 0 0 1 15 0"/></svg>
-                    </span>
+        {{-- ── KPI cards ── --}}
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-icon teal">
+                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </div>
-                <p class="ui-stat-value" id="stat-total">{{ $students->count() }}</p>
+                <div>
+                    <div class="kpi-val">{{ $students->count() }}</div>
+                    <div class="kpi-label">Students in {{ $schoolClass->name }}</div>
+                </div>
             </div>
-            <div class="ui-stat-card ui-animate-in ui-animate-in-2">
-                <div class="att-stat-top">
-                    <p class="ui-stat-label">Present</p>
-                    <span class="att-stat-icon att-stat-icon-green">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                    </span>
+            <div class="kpi-card">
+                <div class="kpi-icon teal">
+                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                 </div>
-                <p class="ui-stat-value" style="color:#15803d" id="stat-present">0</p>
+                <div>
+                    <div class="kpi-val" id="stat-present">0</div>
+                    <div class="kpi-label">Present</div>
+                </div>
             </div>
-            <div class="ui-stat-card ui-animate-in ui-animate-in-3">
-                <div class="att-stat-top">
-                    <p class="ui-stat-label">Absent</p>
-                    <span class="att-stat-icon att-stat-icon-red">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                    </span>
+            <div class="kpi-card">
+                <div class="kpi-icon rose">
+                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </div>
-                <p class="ui-stat-value" style="color:#b91c1c" id="stat-absent">0</p>
+                <div>
+                    <div class="kpi-val" id="stat-absent">0</div>
+                    <div class="kpi-label">Absent</div>
+                </div>
             </div>
-            <div class="ui-stat-card ui-animate-in ui-animate-in-4">
-                <div class="att-stat-top">
-                    <p class="ui-stat-label">Attendance Rate</p>
-                    <span class="att-stat-icon att-stat-icon-teal">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg>
-                    </span>
+            <div class="kpi-card">
+                <div class="kpi-icon indigo">
+                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg>
                 </div>
-                <p class="ui-stat-value" style="color:#0f766e" id="stat-rate">0%</p>
-                <span class="ui-progress mt-2">
-                    <span class="ui-progress-fill" id="stat-rate-fill" style="width:0%;background:linear-gradient(90deg,#5eead4,#0f766e)"></span>
-                </span>
+                <div>
+                    <div class="kpi-val" id="stat-rate">0%</div>
+                    <div class="kpi-label">Attendance Rate</div>
+                    <div class="kpi-note" id="stat-note">0/{{ $students->count() }} marked present</div>
+                </div>
             </div>
         </div>
 
         <form method="POST" action="{{ route('teacher.attendance.store') }}" id="attendance-form">
             @csrf
 
-            <div class="att-toolbar-card">
-                <div class="att-toolbar-field">
+            <div class="toolbar-card">
+                <div class="toolbar-field">
                     <label for="att-date">Attendance Date</label>
                     <input type="date" id="att-date" name="date" value="{{ $date }}"
-                        class="ui-input @error('date') border-red-400 @enderror" style="width:auto">
+                        class="att-input @error('date') border-red-400 @enderror">
                     @error('date') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="att-search-wrap">
                     <label for="student-search" class="sr-only">Search students</label>
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="m20 20-3.5-3.5"/></svg>
-                    <input type="text" id="student-search" class="ui-input" placeholder="Search students by name…" autocomplete="off">
+                    <input type="text" id="student-search" class="att-input" placeholder="Search students by name…" autocomplete="off">
                 </div>
 
-                <button type="button" id="mark-all-present" class="att-mark-btn att-mark-present">
+                <button type="button" id="mark-all-present" class="qa-btn ghost">
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                     All Present
                 </button>
-                <button type="button" id="mark-all-absent" class="att-mark-btn att-mark-absent">
+                <button type="button" id="mark-all-absent" class="qa-btn ghost-rose">
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                     All Absent
                 </button>
             </div>
 
-            <div class="ui-card overflow-hidden">
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-title">
+                        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Students
+                    </div>
+                </div>
+
                 @forelse($students as $student)
                     @php
                         $record = $attendanceByStudent->get($student->id);
                         $status = old('status.'.$student->id, $record?->status ?? 'present');
                         $indexNumber = $student->profile?->index_number ?? $student->admission_number;
-                        $initials = collect(explode(' ', $student->name))->map(fn ($p) => mb_substr($p, 0, 1))->take(2)->implode('');
-                        $colours = ['#6366f1','#8b5cf6','#ec4899','#f59e0b','#10b981','#0ea5e9','#ef4444','#14b8a6'];
-                        $avatarColor = $colours[ord(strtolower($student->name[0] ?? 'a')) % count($colours)];
+                        $avatarColours = ['#0f766e','#6366f1','#8b5cf6','#ec4899','#f59e0b','#0ea5e9','#ef4444','#14b8a6'];
+                        $aColor = $avatarColours[ord(strtolower($student->name[0] ?? 'a')) % count($avatarColours)];
                     @endphp
-                    <div class="att-row {{ $status === 'absent' ? 'is-absent' : '' }}" data-name="{{ strtolower($student->name) }}">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <span class="ui-avatar" style="background:{{ $avatarColor }};color:#fff">{{ strtoupper($initials) }}</span>
-                            <span class="min-w-0">
-                                <span class="block truncate text-sm font-semibold text-gray-800">{{ $student->name }}</span>
-                                <span class="block text-xs text-gray-400">Index {{ $indexNumber }}</span>
-                            </span>
+                    <div class="att-row" data-name="{{ strtolower($student->name) }}">
+                        <div class="roster-av" style="background:{{ $aColor }}">{{ strtoupper(substr($student->name, 0, 1)) }}</div>
+                        <div class="min-w-0">
+                            <div class="roster-nm truncate">{{ $student->name }}</div>
+                            <div class="roster-adm">Index {{ $indexNumber }}</div>
                         </div>
                         <div class="att-toggle">
-                            <label class="cursor-pointer">
-                                <input type="radio" class="sr-only attendance-radio" name="status[{{ $student->id }}]" value="present" {{ $status === 'present' ? 'checked' : '' }}>
-                                <span class="att-toggle-btn att-toggle-present {{ $status === 'present' ? 'is-active' : '' }}">
-                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                                    Present
+                            <label>
+                                <input type="radio" class="attendance-radio" name="status[{{ $student->id }}]" value="present" {{ $status === 'present' ? 'checked' : '' }}>
+                                <span class="status-dot present {{ $status === 'present' ? 'is-active' : '' }}">
+                                    <span class="dot"></span>Present
                                 </span>
                             </label>
-                            <label class="cursor-pointer">
-                                <input type="radio" class="sr-only attendance-radio" name="status[{{ $student->id }}]" value="absent" {{ $status === 'absent' ? 'checked' : '' }}>
-                                <span class="att-toggle-btn att-toggle-absent {{ $status === 'absent' ? 'is-active' : '' }}">
-                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                                    Absent
+                            <label>
+                                <input type="radio" class="attendance-radio" name="status[{{ $student->id }}]" value="absent" {{ $status === 'absent' ? 'checked' : '' }}>
+                                <span class="status-dot absent {{ $status === 'absent' ? 'is-active' : '' }}">
+                                    <span class="dot"></span>Absent
                                 </span>
                             </label>
                         </div>
                     </div>
                 @empty
                     <div class="ui-empty">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.25a7.5 7.5 0 0 1 15 0"/></svg>
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                         <p>No students in your class.</p>
                     </div>
                 @endforelse
-                <div class="att-no-results" id="att-no-results">No students match your search.</div>
+                <div class="ui-empty" id="att-no-results" style="display:none">
+                    <p>No students match your search.</p>
+                </div>
             </div>
 
             @if($students->count())
-                <div class="att-save-bar">
-                    <p class="att-save-summary">
+                <div class="save-bar">
+                    <p class="save-summary">
                         <strong id="live-present-count">0</strong> present ·
                         <strong id="live-absent-count">0</strong> absent
                         of <strong>{{ $students->count() }}</strong> students
                     </p>
-                    <button type="submit" class="ui-submit-btn">
-                        <svg style="width:16px;height:16px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    <button type="submit" class="qa-btn primary">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                         Save Attendance
                     </button>
                 </div>
@@ -272,19 +325,18 @@
         function refreshRow(row) {
             const presentInput = row.querySelector('input[value="present"]');
             const absentInput = row.querySelector('input[value="absent"]');
-            const presentBtn = row.querySelector('.att-toggle-present');
-            const absentBtn = row.querySelector('.att-toggle-absent');
-            if (!presentInput || !absentInput || !presentBtn || !absentBtn) return;
+            const presentPill = row.querySelector('.status-dot.present');
+            const absentPill = row.querySelector('.status-dot.absent');
+            if (!presentInput || !absentInput || !presentPill || !absentPill) return;
 
             const isPresent = presentInput.checked;
-            presentBtn.classList.toggle('is-active', isPresent);
-            absentBtn.classList.toggle('is-active', !isPresent);
-            row.classList.toggle('is-absent', !isPresent);
+            presentPill.classList.toggle('is-active', isPresent);
+            absentPill.classList.toggle('is-active', !isPresent);
         }
 
         function updateStats() {
             const total = radios.length ? new Set(Array.from(radios).map(r => r.name)).size : 0;
-            const present = document.querySelectorAll('input.attendance-radio[value="present"]:checked').length;
+            const present = document.querySelectorAll('.attendance-radio[value="present"]:checked').length;
             const absent = Math.max(total - present, 0);
             const rate = total ? Math.round((present / total) * 100) : 0;
 
@@ -292,11 +344,9 @@
             setText('stat-present', present);
             setText('stat-absent', absent);
             setText('stat-rate', rate + '%');
+            setText('stat-note', present + '/' + total + ' marked present');
             setText('live-present-count', present);
             setText('live-absent-count', absent);
-
-            const fill = document.getElementById('stat-rate-fill');
-            if (fill) fill.style.width = rate + '%';
         }
 
         function refreshAll() {
@@ -311,34 +361,26 @@
             });
         });
 
-        const markAllPresentBtn = document.getElementById('mark-all-present');
-        if (markAllPresentBtn) {
-            markAllPresentBtn.addEventListener('click', () => {
-                document.querySelectorAll('input.attendance-radio[value="present"]').forEach((input) => { input.checked = true; });
-                refreshAll();
-            });
-        }
+        document.getElementById('mark-all-present')?.addEventListener('click', () => {
+            document.querySelectorAll('.attendance-radio[value="present"]').forEach((input) => { input.checked = true; });
+            refreshAll();
+        });
 
-        const markAllAbsentBtn = document.getElementById('mark-all-absent');
-        if (markAllAbsentBtn) {
-            markAllAbsentBtn.addEventListener('click', () => {
-                document.querySelectorAll('input.attendance-radio[value="absent"]').forEach((input) => { input.checked = true; });
-                refreshAll();
-            });
-        }
+        document.getElementById('mark-all-absent')?.addEventListener('click', () => {
+            document.querySelectorAll('.attendance-radio[value="absent"]').forEach((input) => { input.checked = true; });
+            refreshAll();
+        });
 
-        if (searchInput) {
-            searchInput.addEventListener('input', () => {
-                const term = searchInput.value.trim().toLowerCase();
-                let visibleCount = 0;
-                rows.forEach((row) => {
-                    const matches = !term || row.dataset.name.includes(term);
-                    row.classList.toggle('is-hidden', !matches);
-                    if (matches) visibleCount++;
-                });
-                if (noResults) noResults.style.display = (term && visibleCount === 0) ? 'block' : 'none';
+        searchInput?.addEventListener('input', () => {
+            const term = searchInput.value.trim().toLowerCase();
+            let visibleCount = 0;
+            rows.forEach((row) => {
+                const matches = !term || row.dataset.name.includes(term);
+                row.classList.toggle('is-hidden', !matches);
+                if (matches) visibleCount++;
             });
-        }
+            if (noResults) noResults.style.display = (term && visibleCount === 0) ? 'block' : 'none';
+        });
 
         refreshAll();
     })();
