@@ -14,7 +14,7 @@ class HomeworkController extends Controller
     public function index()
     {
         $parent = auth()->user();
-        $student = $parent->students()->first();
+        $student = $parent->students()->with('schoolClass')->first();
 
         if (!$student) {
             return view('parent.homework.index', ['student' => null, 'submissions' => collect()]);
