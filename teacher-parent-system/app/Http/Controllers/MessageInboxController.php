@@ -14,10 +14,18 @@ class MessageInboxController extends Controller
             ->latest('created_at')
             ->paginate(15);
 
+        if ($request->user()->isTeacher()) {
+            $unreadCount = MessageRecipient::where('user_id', $request->user()->id)
+                ->whereNull('read_at')
+                ->count();
+
+            return view('teacher.messages.inbox', compact('recipients', 'unreadCount'));
+        }
+
         return view('messages.inbox', [
             'recipients' => $recipients,
-            'layout' => $request->user()->isTeacher() ? 'layouts.teacher' : 'layouts.parent',
-            'portalLabel' => $request->user()->isTeacher() ? 'Teacher' : 'Student',
+            'layout' => 'layouts.parent',
+            'portalLabel' => 'Student',
         ]);
     }
 
@@ -30,10 +38,14 @@ class MessageInboxController extends Controller
             $recipient->update(['read_at' => now()]);
         }
 
+        if ($request->user()->isTeacher()) {
+            return view('teacher.messages.show', compact('recipient'));
+        }
+
         return view('messages.show', [
             'recipient' => $recipient,
-            'layout' => $request->user()->isTeacher() ? 'layouts.teacher' : 'layouts.parent',
-            'portalLabel' => $request->user()->isTeacher() ? 'Teacher' : 'Student',
+            'layout' => 'layouts.parent',
+            'portalLabel' => 'Student',
         ]);
     }
 }
