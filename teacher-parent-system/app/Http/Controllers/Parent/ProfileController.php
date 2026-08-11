@@ -12,7 +12,7 @@ class ProfileController extends Controller
 {
     public function show()
     {
-        $student = auth()->user()->students()->with('profile')->first();
+        $student = auth()->user()->students()->with(['profile', 'schoolClass'])->first();
         $profile = $student?->profile;
 
         return view('parent.profile', compact('student', 'profile'));

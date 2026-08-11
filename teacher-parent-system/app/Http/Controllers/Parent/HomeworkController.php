@@ -14,7 +14,7 @@ class HomeworkController extends Controller
     public function index()
     {
         $parent = auth()->user();
-        $student = $parent->students()->first();
+        $student = $parent->students()->with('schoolClass')->first();
 
         if (!$student) {
             return view('parent.homework.index', ['student' => null, 'submissions' => collect()]);
@@ -33,7 +33,7 @@ class HomeworkController extends Controller
     {
         [$student, $submission] = $this->resolve($homework);
 
-        $homework->load('questions.options');
+        $homework->load('questions.options', 'teacher');
         $submission->load('answers');
 
         return view('parent.homework.show', compact('homework', 'student', 'submission'));
