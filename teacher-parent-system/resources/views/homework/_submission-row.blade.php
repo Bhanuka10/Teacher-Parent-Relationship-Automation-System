@@ -41,7 +41,7 @@
             </span>
 
             @if($canGrade && $submission->isSubmitted())
-                <button type="button" class="ui-tab-btn" style="background:#eef2ff;color:#4338ca" data-grade-toggle="{{ $submission->id }}">
+                <button type="button" class="ui-tab-btn" style="background:#ccfbf1;color:#0f766e" data-grade-toggle="{{ $submission->id }}">
                     {{ $submission->isGraded() ? 'Edit grade' : 'Grade' }}
                 </button>
             @endif
@@ -87,7 +87,7 @@
 
     @if($canGrade && $submission->isSubmitted())
         <form method="POST" action="{{ route('teacher.homework.grade', [$homework, $submission]) }}"
-              class="hidden mt-3 flex flex-wrap items-end gap-3 rounded-lg border border-indigo-100 bg-indigo-50/50 p-3"
+              class="hidden mt-3 flex-wrap items-end gap-3 rounded-lg border border-teal-100 bg-teal-50/50 p-3"
               id="grade-panel-{{ $submission->id }}">
             @csrf
             @method('PUT')
@@ -95,14 +95,16 @@
                 <label class="ui-field-label" style="margin-bottom:4px">Marks (/{{ $homework->max_marks }})</label>
                 <input type="number" name="marks" min="0" max="{{ $homework->max_marks }}" required
                        value="{{ old('marks', $submission->marks ?? ($homework->type === 'quiz' ? $submission->auto_score : '')) }}"
-                       class="ui-input" style="padding:7px 10px">
+                       class="att-input" style="padding:7px 10px">
             </div>
             <div style="flex:1;min-width:200px">
                 <label class="ui-field-label" style="margin-bottom:4px">Feedback</label>
                 <input type="text" name="feedback" value="{{ old('feedback', $submission->feedback) }}"
-                       placeholder="Optional feedback for the student" class="ui-input" style="padding:7px 10px">
+                       placeholder="Optional feedback for the student" class="att-input" style="padding:7px 10px">
             </div>
-            <button type="submit" class="ui-submit-btn" style="padding:8px 16px;margin-top:0">Save grade</button>
+            <div style="text-align: right;">
+                <button type="submit" class="qa-btn primary" style="padding:8px 16px;margin-top:0">Save grade</button>
+            </div>
         </form>
     @endif
 </div>
