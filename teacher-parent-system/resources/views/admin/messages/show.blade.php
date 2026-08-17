@@ -59,7 +59,7 @@
                     <span class="msg-avatar {{ $isTeacherMsg ? 'msg-avatar-teacher' : 'msg-avatar-student' }}">{{ strtoupper($initials) }}</span>
                     <div class="min-w-0 flex-1">
                         <p class="text-sm font-semibold text-gray-800">{{ $recipient->user->name }}</p>
-                        <p class="mt-0.5 break-words text-xs text-gray-500">{{ $recipient->user->email }}@if($classes->isNotEmpty()) · {{ $classes->pluck('name')->unique()->join(', ') }}@endif</p>
+                        <p class="mt-0.5 wrap-break-word text-xs text-gray-500">{{ $recipient->user->email }}@if($classes->isNotEmpty()) · {{ $classes->pluck('name')->unique()->join(', ') }}@endif</p>
                     </div>
                     @if($recipient->read_at)
                         <span class="msg-status-pill msg-status-read">
@@ -82,16 +82,22 @@
 
 @push('styles')
 <style>
+    :root {
+        --accent:       #7c3aed;
+        --accent-light: #ede9fe;
+        --accent-mid:   #4f46e5;
+    }
+
     .msg-back {
         display: inline-flex; align-items: center; gap: 6px;
-        font-size: .8rem; font-weight: 500; color: #4f46e5; text-decoration: none; transition: color .15s;
+        font-size: 13px; font-weight: 600; color: var(--accent); text-decoration: none; transition: color .15s;
     }
-    .msg-back:hover { color: #3730a3; }
+    .msg-back:hover { color: var(--accent-mid); }
     .msg-back svg { width: 14px; height: 14px; }
 
     .msg-detail-card {
-        background: #fff; border: 1px solid #e5e7eb; border-radius: 16px;
-        box-shadow: 0 1px 3px rgba(0,0,0,.04);
+        background: #fff; border: 1px solid #e5e7eb; border-radius: 14px;
+        box-shadow: 0 1px 4px rgba(0,0,0,.04);
     }
     .msg-detail-header { padding: 26px 28px; }
 
@@ -107,7 +113,7 @@
     }
     .msg-progress-fill {
         display: block; height: 100%; border-radius: 999px;
-        background: linear-gradient(90deg, #818cf8, #6366f1);
+        background: linear-gradient(90deg, var(--accent-mid), var(--accent));
         transition: width .5s ease;
     }
 
@@ -117,7 +123,7 @@
         width: 100%; padding: 7px 10px 7px 30px; border: 1px solid #e5e7eb; border-radius: 8px;
         font-size: 12.5px; color: #374151; outline: none; transition: border-color .15s, box-shadow .15s;
     }
-    .msg-search-wrap input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.12); }
+    .msg-search-wrap input:focus { border-color: var(--accent-mid); box-shadow: 0 0 0 3px rgba(79,70,229,.12); }
 
     .msg-recipient-row {
         display: flex; align-items: center; gap: 12px;
