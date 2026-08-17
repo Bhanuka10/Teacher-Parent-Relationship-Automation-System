@@ -203,11 +203,13 @@ class ExamResultService
 
         $present = $records->where('status', 'present')->count();
         $absent = $records->where('status', 'absent')->count();
-        $total = $present + $absent;
+        $leave = $records->where('status', 'leave')->count();
+        $total = $present + $absent; // leave is excused, excluded from the rate
 
         return [
             'present' => $present,
             'absent' => $absent,
+            'leave' => $leave,
             'total' => $total,
             'percent' => $total > 0 ? round(($present / $total) * 100, 1) : null,
         ];

@@ -127,6 +127,16 @@
     .status-dot.absent.is-active { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
     .status-dot.absent.is-active .dot { background: #ef4444; }
 
+    /* A day already covered by an approved leave is locked — shown as a
+       static badge instead of the present/absent radio pair, so the daily
+       grid can never silently overwrite it (see AttendanceController::store). */
+    .status-locked {
+        display: inline-flex; align-items: center; gap: 5px; margin-left: auto; flex-shrink: 0;
+        border-radius: 20px; padding: 5px 12px; font-size: 10.5px; font-weight: 700;
+        background: #fef3c7; color: #92400e; border: 1.5px solid #fde68a;
+    }
+    .status-locked .dot { width: 5px; height: 5px; border-radius: 50%; background: #d97706; }
+
     .save-bar {
         position: sticky; bottom: 0; left: 0; right: 0; margin-top: 20px; z-index: 10;
         display: flex; align-items: center; justify-content: space-between; gap: 16px;
@@ -211,6 +221,15 @@
                 </div>
             </div>
             <div class="kpi-card">
+                <div class="kpi-icon amber">
+                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z"/></svg>
+                </div>
+                <div>
+                    <div class="kpi-val">{{ $attendanceByStudent->where('status', 'leave')->count() }}</div>
+                    <div class="kpi-label">On Leave</div>
+                </div>
+            </div>
+            <div class="kpi-card">
                 <div class="kpi-icon indigo">
                     <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg>
                 </div>
@@ -272,20 +291,26 @@
                             <div class="roster-nm truncate">{{ $student->name }}</div>
                             <div class="roster-adm">Index {{ $indexNumber }}</div>
                         </div>
-                        <div class="att-toggle">
-                            <label>
-                                <input type="radio" class="attendance-radio" name="status[{{ $student->id }}]" value="present" {{ $status === 'present' ? 'checked' : '' }}>
-                                <span class="status-dot present {{ $status === 'present' ? 'is-active' : '' }}">
-                                    <span class="dot"></span>Present
-                                </span>
-                            </label>
-                            <label>
-                                <input type="radio" class="attendance-radio" name="status[{{ $student->id }}]" value="absent" {{ $status === 'absent' ? 'checked' : '' }}>
-                                <span class="status-dot absent {{ $status === 'absent' ? 'is-active' : '' }}">
-                                    <span class="dot"></span>Absent
-                                </span>
-                            </label>
-                        </div>
+                        @if($record?->status === 'leave')
+                            <span class="status-locked" title="Locked by an approved leave request — see Leave Requests to change it">
+                                <span class="dot"></span>On Leave
+                            </span>
+                        @else
+                            <div class="att-toggle">
+                                <label>
+                                    <input type="radio" class="attendance-radio" name="status[{{ $student->id }}]" value="present" {{ $status === 'present' ? 'checked' : '' }}>
+                                    <span class="status-dot present {{ $status === 'present' ? 'is-active' : '' }}">
+                                        <span class="dot"></span>Present
+                                    </span>
+                                </label>
+                                <label>
+                                    <input type="radio" class="attendance-radio" name="status[{{ $student->id }}]" value="absent" {{ $status === 'absent' ? 'checked' : '' }}>
+                                    <span class="status-dot absent {{ $status === 'absent' ? 'is-active' : '' }}">
+                                        <span class="dot"></span>Absent
+                                    </span>
+                                </label>
+                            </div>
+                        @endif
                     </div>
                 @empty
                     <div class="ui-empty">

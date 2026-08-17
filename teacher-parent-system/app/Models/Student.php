@@ -48,4 +48,9 @@ class Student extends Model
     {
         return $this->hasMany(ExamMark::class);
     }
+
+    public function leaveRequests()
+    {
+        return $this->hasMany(LeaveRequest::class);
+    }
 }

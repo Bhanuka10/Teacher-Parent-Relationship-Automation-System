@@ -156,9 +156,11 @@
     }
     .status-badge.present { background: #d1fae5; color: #065f46; }
     .status-badge.absent  { background: #fee2e2; color: #991b1b; }
+    .status-badge.leave   { background: #fef3c7; color: #92400e; }
     .status-dot { width: 6px; height: 6px; border-radius: 50%; }
     .status-badge.present .status-dot { background: #10b981; }
     .status-badge.absent  .status-dot { background: #ef4444; }
+    .status-badge.leave   .status-dot { background: #d97706; }
     .marked-cell { display: flex; align-items: center; gap: 8px; }
     .marked-avatar {
         width: 26px; height: 26px; border-radius: 50%;
@@ -328,9 +330,9 @@
                         <td><span class="class-badge">{{ $className }}</span></td>
                         <td class="date-cell">{{ $record->date->format('M j, Y') }}</td>
                         <td>
-                            <span class="status-badge {{ $record->status === 'present' ? 'present' : 'absent' }}">
+                            <span class="status-badge {{ $record->status }}">
                                 <span class="status-dot"></span>
-                                {{ ucfirst($record->status) }}
+                                {{ $record->status === 'leave' ? 'On Leave' : ucfirst($record->status) }}
                             </span>
                         </td>
                         <td>

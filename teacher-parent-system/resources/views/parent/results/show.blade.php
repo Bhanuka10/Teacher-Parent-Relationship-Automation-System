@@ -180,6 +180,7 @@
                 <div class="mt-3 flex gap-2">
                     <span class="ui-status-pill ui-status-graded">{{ $attendance['present'] }} present</span>
                     <span class="ui-status-pill ui-status-expired">{{ $attendance['absent'] }} absent</span>
+                    <span class="ui-status-pill ui-status-pending">{{ $attendance['leave'] }} leave</span>
                 </div>
             </section>
         </div>

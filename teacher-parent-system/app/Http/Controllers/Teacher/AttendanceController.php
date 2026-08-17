@@ -53,7 +53,21 @@ class AttendanceController extends Controller
         $date = $validated['date'];
         $statuses = $validated['status'] ?? [];
 
+        // Days already on an approved leave are locked — the grid doesn't
+        // render radios for them (see teacher/attendance/index.blade.php),
+        // so they're always missing from $statuses. Without this guard
+        // they'd silently fall through to the 'absent' default below and
+        // overwrite the approved leave record.
+        $leaveLockedStudentIds = Attendance::whereIn('student_id', $schoolClass->students->pluck('id'))
+            ->whereDate('date', $date)
+            ->where('status', 'leave')
+            ->pluck('student_id');
+
         foreach ($schoolClass->students as $student) {
+            if ($leaveLockedStudentIds->contains($student->id)) {
+                continue;
+            }
+
             $status = $statuses[$student->id] ?? 'absent';
 
             Attendance::updateOrCreate(

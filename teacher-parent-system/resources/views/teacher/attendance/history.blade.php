@@ -51,6 +51,7 @@
     .kpi-icon.teal   { background: var(--t-accent-light); color: var(--t-accent); }
     .kpi-icon.indigo { background: #e0e7ff; color: #4338ca; }
     .kpi-icon.rose   { background: #ffe4e6; color: #be123c; }
+    .kpi-icon.amber  { background: #fef3c7; color: #b45309; }
     .kpi-val   { font-size: 24px; font-weight: 800; color: #111827; line-height: 1.15; }
     .kpi-val.sm { font-size: 17px; }
     .kpi-label { font-size: 12px; color: #6b7280; margin-top: 2px; }
@@ -125,9 +126,11 @@
     }
     .status-dot.present { background: #d1fae5; color: #065f46; }
     .status-dot.absent  { background: #fee2e2; color: #991b1b; }
+    .status-dot.leave   { background: #fef3c7; color: #92400e; }
     .dot { width: 5px; height: 5px; border-radius: 50%; }
     .status-dot.present .dot { background: #10b981; }
     .status-dot.absent  .dot { background: #ef4444; }
+    .status-dot.leave   .dot { background: #d97706; }
 </style>
 @endpush
 
@@ -162,10 +165,11 @@
         </div>
     @else
         @php
-            $totalRecords = $records->count();
             $presentCount = $records->where('status', 'present')->count();
-            $absentCount = $totalRecords - $presentCount;
-            $rate = $totalRecords ? round(($presentCount / $totalRecords) * 100) : 0;
+            $absentCount = $records->where('status', 'absent')->count();
+            $leaveCount = $records->where('status', 'leave')->count();
+            $markableTotal = $presentCount + $absentCount; // leave is excused, excluded from the rate
+            $rate = $markableTotal ? round(($presentCount / $markableTotal) * 100) : 0;
             $groups = $records->groupBy(fn ($r) => $r->date->format('Y-m-d'));
         @endphp
 
@@ -196,6 +200,15 @@
                 <div>
                     <div class="kpi-val">{{ $absentCount }}</div>
                     <div class="kpi-label">Absent</div>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon amber">
+                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z"/></svg>
+                </div>
+                <div>
+                    <div class="kpi-val">{{ $leaveCount }}</div>
+                    <div class="kpi-label">On Leave</div>
                 </div>
             </div>
             <div class="kpi-card">
@@ -239,6 +252,7 @@
         @forelse($groups as $dateKey => $groupRecords)
             @php
                 $groupPresent = $groupRecords->where('status', 'present')->count();
+                $groupAbsent = $groupRecords->where('status', 'absent')->count();
                 $groupTotal = $groupRecords->count();
             @endphp
             <div class="date-group">
@@ -247,7 +261,7 @@
                         <div class="date-group-label">{{ \Illuminate\Support\Carbon::parse($dateKey)->format('l, d M Y') }}</div>
                         <div class="date-group-sub">{{ $groupTotal }} {{ Str::plural('record', $groupTotal) }}</div>
                     </div>
-                    <span class="date-group-tag {{ $groupPresent === $groupTotal ? 'full' : '' }}">{{ $groupPresent }}/{{ $groupTotal }} present</span>
+                    <span class="date-group-tag {{ $groupAbsent === 0 ? 'full' : '' }}">{{ $groupPresent }}/{{ $groupTotal }} present</span>
                 </div>
                 <div class="section-card">
                     @foreach($groupRecords as $record)
@@ -262,9 +276,9 @@
                                 <div class="roster-nm truncate">{{ $record->student->name }}</div>
                                 <div class="roster-adm">Index {{ $indexNumber }}</div>
                             </div>
-                            <span class="status-dot {{ $record->status === 'present' ? 'present' : 'absent' }}">
+                            <span class="status-dot {{ $record->status }}">
                                 <span class="dot"></span>
-                                {{ ucfirst($record->status) }}
+                                {{ $record->status === 'leave' ? 'On Leave' : ucfirst($record->status) }}
                             </span>
                         </div>
                     @endforeach

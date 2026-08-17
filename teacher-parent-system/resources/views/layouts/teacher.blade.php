@@ -59,6 +59,15 @@
                 <span class="app-sidebar-text">Attendance History</span>
             </a>
 
+            @php($pendingLeaveCount = \App\Models\LeaveRequest::where('school_class_id', auth()->user()->schoolClass?->id)->where('status', 'pending')->count())
+            <a href="{{ route('teacher.leaves.index') }}" title="Leave Requests{{ $pendingLeaveCount ? ' ('.$pendingLeaveCount.' pending)' : '' }}"
+               class="app-sidebar-link {{ request()->routeIs('teacher.leaves.*') ? 'bg-teal-700 text-white' : 'text-teal-200 hover:bg-teal-800 hover:text-white' }}">
+                <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z" />
+                </svg>
+                <span class="app-sidebar-text">Leave Requests @if($pendingLeaveCount)<span class="ml-1 rounded-full bg-rose-500 px-1.5 py-0.5 text-[10px] text-white">{{ $pendingLeaveCount }}</span>@endif</span>
+            </a>
+
             @php($toGradeCount = \App\Models\HomeworkSubmission::whereHas('homework', fn ($q) => $q->where('teacher_id', auth()->id()))->whereNotNull('submitted_at')->whereNull('graded_at')->count())
             <a href="{{ route('teacher.homework.index') }}" title="Homework{{ $toGradeCount ? ' ('.$toGradeCount.' to grade)' : '' }}"
                class="app-sidebar-link {{ request()->routeIs('teacher.homework.*') ? 'bg-teal-700 text-white' : 'text-teal-200 hover:bg-teal-800 hover:text-white' }}">

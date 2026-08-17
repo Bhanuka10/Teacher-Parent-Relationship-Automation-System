@@ -1,0 +1,23 @@
+@extends('layouts.parent')
+@section('title', 'Request Leave')
+
+@section('content')
+<div class="mx-auto max-w-2xl">
+    <a href="{{ route('parent.leaves.index') }}" class="ui-back" style="color:#c2410c">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Back to leave requests
+    </a>
+
+    <h1 class="mt-4 text-2xl font-bold text-gray-800">Request leave</h1>
+    <p class="mt-1 text-sm text-gray-500">Submit a date range and reason — the class teacher will review it.</p>
+
+    <form method="POST" action="{{ route('parent.leaves.store') }}" class="mt-6">
+        @csrf
+        <section class="ui-card p-6">
+            @include('leaves._form')
+        </section>
+
+        <button type="submit" class="ui-submit-btn mt-5 w-full justify-center" style="width:100%;background:linear-gradient(135deg,#c2410c,#f97316)">Submit request</button>
+    </form>
+</div>
+@endsection

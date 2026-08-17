@@ -22,6 +22,9 @@ use App\Http\Controllers\Teacher\ExamController as TeacherExam;
 use App\Http\Controllers\Admin\ExamController as AdminExam;
 use App\Http\Controllers\Admin\GradingSchemeController;
 use App\Http\Controllers\Parent\ResultController as ParentResult;
+use App\Http\Controllers\Teacher\LeaveController as TeacherLeave;
+use App\Http\Controllers\Admin\LeaveController as AdminLeave;
+use App\Http\Controllers\Parent\LeaveController as ParentLeave;
 
 // Root: send guests to login, and already-authenticated users straight to
 // their dashboard. This must NOT sit behind the `guest` middleware — Laravel's
@@ -65,6 +68,8 @@ Route::middleware(['auth', 'admin'])
     ->group(function () {
         Route::get('/dashboard', [AdminDash::class, 'index'])->name('dashboard');
         Route::get('/attendance/history', [AdminAttendance::class, 'history'])->name('attendance.history');
+        Route::get('/leaves', [AdminLeave::class, 'index'])->name('leaves.index');
+        Route::get('/leaves/{leaveRequest}', [AdminLeave::class, 'show'])->name('leaves.show');
         Route::get('/messages', [AdminMessage::class, 'index'])->name('messages.index');
         Route::post('/messages', [AdminMessage::class, 'store'])->name('messages.store');
         Route::get('/messages/{message}', [AdminMessage::class, 'show'])->name('messages.show');
@@ -94,6 +99,9 @@ Route::middleware(['auth', 'teacher'])
         Route::get('/attendance', [TeacherAttendance::class, 'index'])->name('attendance.index');
         Route::post('/attendance', [TeacherAttendance::class, 'store'])->name('attendance.store');
         Route::get('/attendance/history', [TeacherAttendance::class, 'history'])->name('attendance.history');
+        Route::get('/leaves', [TeacherLeave::class, 'index'])->name('leaves.index');
+        Route::get('/leaves/{leaveRequest}', [TeacherLeave::class, 'show'])->name('leaves.show');
+        Route::put('/leaves/{leaveRequest}/review', [TeacherLeave::class, 'review'])->name('leaves.review');
         Route::get('/profile', [TeacherProfile::class, 'show'])->name('profile');
         Route::put('/profile', [TeacherProfile::class, 'update'])->name('profile.update');
         Route::put('/profile/password', [TeacherProfile::class, 'updatePassword'])->name('profile.password');
@@ -135,4 +143,10 @@ Route::middleware(['auth', 'parent'])
         Route::post('/homework/{homework}/answer', [ParentHomework::class, 'submitQuiz'])->name('homework.answer');
         Route::get('/results', [ParentResult::class, 'index'])->name('results.index');
         Route::get('/results/{exam}', [ParentResult::class, 'show'])->name('results.show');
+        Route::get('/leaves', [ParentLeave::class, 'index'])->name('leaves.index');
+        Route::get('/leaves/create', [ParentLeave::class, 'create'])->name('leaves.create');
+        Route::post('/leaves', [ParentLeave::class, 'store'])->name('leaves.store');
+        Route::get('/leaves/{leaveRequest}/edit', [ParentLeave::class, 'edit'])->name('leaves.edit');
+        Route::put('/leaves/{leaveRequest}', [ParentLeave::class, 'update'])->name('leaves.update');
+        Route::delete('/leaves/{leaveRequest}', [ParentLeave::class, 'destroy'])->name('leaves.destroy');
     });
