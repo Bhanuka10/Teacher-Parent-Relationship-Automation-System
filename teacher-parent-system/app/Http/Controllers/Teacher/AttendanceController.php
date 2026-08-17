@@ -54,7 +54,7 @@ class AttendanceController extends Controller
         $statuses = $validated['status'] ?? [];
 
         foreach ($schoolClass->students as $student) {
-            $status = $statuses[$student->id] ?? 'present';
+            $status = $statuses[$student->id] ?? 'absent';
 
             Attendance::updateOrCreate(
                 [

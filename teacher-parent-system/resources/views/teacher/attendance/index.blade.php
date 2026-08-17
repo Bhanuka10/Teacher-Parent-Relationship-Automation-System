@@ -229,6 +229,7 @@
                 <div class="toolbar-field">
                     <label for="att-date">Attendance Date</label>
                     <input type="date" id="att-date" name="date" value="{{ $date }}"
+                        data-attendance-index-url="{{ route('teacher.attendance.index') }}"
                         class="att-input @error('date') border-red-400 @enderror">
                     @error('date') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
@@ -260,7 +261,7 @@
                 @forelse($students as $student)
                     @php
                         $record = $attendanceByStudent->get($student->id);
-                        $status = old('status.'.$student->id, $record?->status ?? 'present');
+                        $status = old('status.'.$student->id, $record?->status ?? 'absent');
                         $indexNumber = $student->profile?->index_number ?? $student->admission_number;
                         $avatarColours = ['#0f766e','#6366f1','#8b5cf6','#ec4899','#f59e0b','#0ea5e9','#ef4444','#14b8a6'];
                         $aColor = $avatarColours[ord(strtolower($student->name[0] ?? 'a')) % count($avatarColours)];
@@ -321,6 +322,16 @@
         const rows = document.querySelectorAll('.att-row');
         const searchInput = document.getElementById('student-search');
         const noResults = document.getElementById('att-no-results');
+        const dateInput = document.getElementById('att-date');
+
+        // Switching the date here must reload the roster for that date —
+        // otherwise the on-screen radios (from whatever date was originally
+        // loaded) get silently saved against the newly-picked date instead,
+        // overwriting that day's real attendance with stale/default values.
+        dateInput?.addEventListener('change', () => {
+            if (!dateInput.value) return;
+            window.location.href = `${dateInput.dataset.attendanceIndexUrl}?date=${dateInput.value}`;
+        });
 
         function refreshRow(row) {
             const presentInput = row.querySelector('input[value="present"]');

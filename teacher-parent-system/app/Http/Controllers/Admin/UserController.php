@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreateUserRequest;
+use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Models\SchoolClass;
 use App\Models\Student;
 use App\Models\User;
@@ -282,25 +283,50 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        $selectedGrade = null;
+        $selectedSection = null;
+
+        $currentClass = $user->role === 'teacher'
+            ? $user->schoolClass
+            : $user->students()->first()?->schoolClass;
+
+        if ($currentClass && str_contains($currentClass->name, '-')) {
+            [$selectedGrade, $selectedSection] = explode('-', $currentClass->name);
+        }
+
+        return view('admin.users.edit', compact('user', 'selectedGrade', 'selectedSection'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'email', 'unique:users,email,'.$user->id],
-            'password' => ['nullable', 'string', 'min:6', 'confirmed'],
-        ]);
+        $validated = $request->validated();
 
-        $user->name  = $request->name;
-        $user->email = $request->email;
+        $user->name  = $validated['name'];
+        $user->email = $validated['email'];
 
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
+        if (!empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
             $user->must_change_password = true;
         }
         $user->save();
+
+        if (in_array($user->role, ['teacher', 'parent'], true) && !empty($validated['grade']) && !empty($validated['section'])) {
+            $className = $validated['grade'].'-'.$validated['section'];
+            $schoolClass = SchoolClass::firstOrCreate(['name' => $className]);
+
+            if ($user->role === 'teacher') {
+                $oldClass = $user->schoolClass;
+                if ($oldClass && $oldClass->id !== $schoolClass->id) {
+                    $oldClass->update(['teacher_id' => null]);
+                }
+                $schoolClass->update(['teacher_id' => $user->id]);
+            } else {
+                $student = $user->students()->first();
+                if ($student) {
+                    $student->update(['school_class_id' => $schoolClass->id]);
+                }
+            }
+        }
 
         return redirect()->route('admin.users.index', ['role' => $user->role])
             ->with('success', 'User updated.');
