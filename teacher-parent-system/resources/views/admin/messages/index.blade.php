@@ -3,32 +3,16 @@
 
 @section('content')
 <div class="msg-page max-w-6xl">
-    <div class="mb-7 flex items-center gap-4">
-        <div class="msg-hero-icon">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.126A59.77 59.77 0 0 1 21.485 12 59.77 59.77 0 0 1 3.27 20.876L5.999 12Zm0 0h7.5" />
-            </svg>
-        </div>
-        <div>
-            <h1 class="text-2xl font-bold text-gray-800">Messages</h1>
-            <p class="mt-0.5 text-sm text-gray-500">Send separate notices to teachers or students, school-wide or for selected classes.</p>
-        </div>
-    </div>
+    <h1 class="msg-title">Messages</h1>
+    <p class="msg-sub">Send separate notices to <span>teachers or students</span>, school-wide or for selected classes.</p>
 
     <div class="grid gap-6 min-[1360px]:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
 
         {{-- ═══════════ COMPOSE ═══════════ --}}
         <section class="msg-card overflow-hidden">
-            <div class="msg-card-header">
-                <div class="msg-card-header-icon">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                    </svg>
-                </div>
-                <div>
-                    <div class="msg-card-header-title">Compose a new message</div>
-                    <div class="msg-card-header-sub">Reaches every recipient's inbox instantly</div>
-                </div>
+            <div class="msg-section-header">
+                <div class="msg-section-title">Compose a new message</div>
+                <span class="msg-section-sub">Reaches every recipient's inbox instantly</span>
             </div>
 
             <form method="POST" action="{{ route('admin.messages.store') }}" class="p-6" id="compose-form">
@@ -131,8 +115,8 @@
 
         {{-- ═══════════ SENT MESSAGES ═══════════ --}}
         <section class="msg-card overflow-hidden">
-            <div class="flex items-center justify-between border-b border-gray-100 px-6 py-5">
-                <h2 class="text-base font-bold text-gray-800">Sent messages</h2>
+            <div class="msg-section-header">
+                <div class="msg-section-title">Sent messages</div>
                 @if($messages->total())
                     <span class="msg-count-pill">{{ $messages->total() }}</span>
                 @endif
@@ -180,13 +164,7 @@
                     </span>
                 </a>
             @empty
-                <div class="msg-empty">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.126A59.77 59.77 0 0 1 21.485 12 59.77 59.77 0 0 1 3.27 20.876L5.999 12Zm0 0h7.5" />
-                    </svg>
-                    <p>No messages have been sent yet.</p>
-                    <p class="msg-empty-sub">Compose one on the left to reach teachers or students.</p>
-                </div>
+                <div class="msg-empty"><p>No messages have been sent yet.</p></div>
             @endforelse
 
             @if($messages->hasPages())<div class="border-t border-gray-100 px-6 py-4">{{ $messages->links() }}</div>@endif
@@ -197,35 +175,29 @@
 
 @push('styles')
 <style>
-    /* ── Hero icon ── */
-    .msg-hero-icon {
-        width: 46px; height: 46px; flex-shrink: 0; border-radius: 14px;
-        display: flex; align-items: center; justify-content: center;
-        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-        color: #fff; box-shadow: 0 4px 14px rgba(79,70,229,.28);
+    :root {
+        --accent:       #7c3aed;
+        --accent-light: #ede9fe;
+        --accent-mid:   #4f46e5;
     }
-    .msg-hero-icon svg { width: 22px; height: 22px; }
+
+    .msg-title { font-size: 22px; font-weight: 800; color: #111827; margin: 0 0 2px; }
+    .msg-sub   { font-size: 13px; color: #6b7280; margin: 0 0 28px; }
+    .msg-sub span { color: var(--accent); font-weight: 600; }
 
     /* ── Card shell ── */
     .msg-card {
         background: #fff;
-        border-radius: 16px;
+        border-radius: 14px;
         border: 1px solid #e5e7eb;
-        box-shadow: 0 1px 3px rgba(0,0,0,.04);
+        box-shadow: 0 1px 4px rgba(0,0,0,.04);
     }
-    .msg-card-header {
-        display: flex; align-items: center; gap: 14px;
-        padding: 22px 24px;
-        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    .msg-section-header {
+        display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+        padding: 16px 20px; border-bottom: 1px solid #f3f4f6;
     }
-    .msg-card-header-icon {
-        width: 40px; height: 40px; flex-shrink: 0; border-radius: 11px;
-        display: flex; align-items: center; justify-content: center;
-        background: rgba(255,255,255,.16); color: #fff;
-    }
-    .msg-card-header-icon svg { width: 20px; height: 20px; }
-    .msg-card-header-title { font-size: .98rem; font-weight: 700; color: #fff; }
-    .msg-card-header-sub { font-size: .76rem; color: rgba(255,255,255,.75); margin-top: 1px; }
+    .msg-section-title { font-size: 14px; font-weight: 800; color: #111827; }
+    .msg-section-sub { font-size: 11.5px; color: #9ca3af; }
 
     .msg-field-label {
         font-size: .78rem; font-weight: 600; color: #374151; margin-bottom: 8px;
@@ -239,7 +211,7 @@
         position: relative;
     }
     .msg-audience-option:hover { border-color: #c7d2fe; background: #fafafe; transform: translateY(-1px); }
-    .msg-audience-option:has(:checked) { border-color: #6366f1; background: #eef2ff; }
+    .msg-audience-option:has(:checked) { border-color: var(--accent-mid); background: #eef2ff; }
     .msg-audience-icon {
         width: 34px; height: 34px; flex-shrink: 0; border-radius: 9px;
         display: flex; align-items: center; justify-content: center;
@@ -255,7 +227,7 @@
     }
     .msg-audience-check svg { width: 11px; height: 11px; }
     .msg-audience-option:has(:checked) .msg-audience-check {
-        background: #6366f1; border-color: #6366f1; color: #fff;
+        background: var(--accent-mid); border-color: var(--accent-mid); color: #fff;
     }
 
     /* ── Segmented tab bar (delivery scope) ── */
@@ -266,7 +238,7 @@
         padding: 7px 16px; border-radius: 8px; font-size: .8rem; font-weight: 600;
         color: #6b7280; cursor: pointer; transition: all .15s; user-select: none;
     }
-    .msg-tab-btn:has(:checked) { background: #fff; color: #4338ca; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+    .msg-tab-btn:has(:checked) { background: #fff; color: var(--accent-mid); box-shadow: 0 1px 3px rgba(0,0,0,.1); }
     .msg-tab-btn:hover:not(:has(:checked)) { color: #374151; }
 
     /* ── Class chips ── */
@@ -286,8 +258,8 @@
         width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid #d1d5db; flex-shrink: 0;
         display: flex; align-items: center; justify-content: center; transition: all .12s;
     }
-    .msg-class-chip:has(:checked) { background: #eef2ff; border-color: #c7d2fe; color: #4338ca; font-weight: 600; }
-    .msg-class-chip:has(:checked) .msg-class-chip-dot { background: #6366f1; border-color: #6366f1; }
+    .msg-class-chip:has(:checked) { background: #eef2ff; border-color: #c7d2fe; color: var(--accent-mid); font-weight: 600; }
+    .msg-class-chip:has(:checked) .msg-class-chip-dot { background: var(--accent-mid); border-color: var(--accent-mid); }
     .msg-class-chip:has(:checked) .msg-class-chip-dot::after {
         content: ''; width: 6px; height: 6px; border-radius: 1px;
         background: #fff; clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
@@ -299,16 +271,16 @@
         font-size: .875rem; color: #111827; background: #fafafa;
         transition: border-color .15s, box-shadow .15s, background .15s; outline: none; box-sizing: border-box;
     }
-    .msg-input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.12); background: #fff; }
+    .msg-input:focus { border-color: var(--accent-mid); box-shadow: 0 0 0 3px rgba(79,70,229,.12); background: #fff; }
 
     /* ── Submit button ── */
     .msg-submit-btn {
         width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
-        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: #fff;
+        background: var(--accent-mid); color: #fff;
         border: none; border-radius: 11px; padding: 12px; font-size: .88rem; font-weight: 600;
         cursor: pointer; transition: all .2s; box-shadow: 0 4px 14px rgba(79,70,229,.28);
     }
-    .msg-submit-btn:hover { box-shadow: 0 6px 20px rgba(79,70,229,.38); transform: translateY(-1px); }
+    .msg-submit-btn:hover { background: #4338ca; box-shadow: 0 6px 20px rgba(79,70,229,.38); transform: translateY(-1px); }
     .msg-submit-btn:disabled { opacity: .75; cursor: default; transform: none; }
     .msg-submit-icon, .msg-submit-spinner { width: 17px; height: 17px; }
     .msg-submit-spinner { animation: msg-spin .8s linear infinite; }
@@ -322,7 +294,7 @@
     }
     .msg-sent-row:last-child { border-bottom: none; }
     .msg-sent-row:hover { background: #fafafa; }
-    .msg-sent-row:hover .msg-chevron { transform: translateX(2px); color: #6366f1; }
+    .msg-sent-row:hover .msg-chevron { transform: translateX(2px); color: var(--accent-mid); }
     .msg-chevron { width: 15px; height: 15px; color: #d1d5db; transition: all .15s; }
 
     .msg-tag {
@@ -337,11 +309,11 @@
     }
     .msg-progress-fill {
         display: block; height: 100%; border-radius: 999px;
-        background: linear-gradient(90deg, #818cf8, #6366f1);
+        background: linear-gradient(90deg, var(--accent-mid), var(--accent));
         transition: width .4s ease;
     }
     .msg-read-pill {
-        border-radius: 999px; background: #eef2ff; color: #4338ca;
+        border-radius: 999px; background: var(--accent-light); color: var(--accent);
         padding: 3px 10px; font-size: 11px; font-weight: 700; white-space: nowrap;
     }
     .msg-count-pill {
@@ -349,10 +321,7 @@
         padding: 2px 9px; font-size: 11.5px; font-weight: 700;
     }
 
-    .msg-empty { padding: 56px 24px; text-align: center; color: #9ca3af; }
-    .msg-empty svg { width: 44px; height: 44px; margin: 0 auto 12px; opacity: .35; }
-    .msg-empty p { font-size: 13.5px; }
-    .msg-empty-sub { font-size: 12px; margin-top: 3px; color: #c1c5cc; }
+    .msg-empty { text-align: center; padding: 40px; color: #9ca3af; font-size: 13px; }
 
     @media (prefers-reduced-motion: reduce) {
         .msg-audience-option, .msg-submit-btn, .msg-chevron, .msg-progress-fill { transition: none; }
