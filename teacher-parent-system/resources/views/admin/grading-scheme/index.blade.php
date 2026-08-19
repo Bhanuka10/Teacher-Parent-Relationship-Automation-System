@@ -150,7 +150,7 @@
     $failingCount = $totalBands - $passingCount;
 @endphp
 
-<div class="max-w-4xl">
+<div class="max-w-7xl">
 
     {{-- ── Page heading ── --}}
     <div class="mt-header">
@@ -234,7 +234,7 @@
                             <label class="mt-field-label">Grade</label>
                             <input type="text" name="grade" maxlength="5" value="{{ $band->grade }}" class="mt-input" style="width:100%" required>
                         </div>
-                        <label class="mt-chip">
+                        <label class="mt-chip" style="margin-left:auto">
                             <input type="checkbox" name="is_passing" value="1" @checked($band->is_passing)>
                             <span>Passing grade</span>
                         </label>
@@ -268,7 +268,7 @@
                 <label class="mt-field-label">Grade</label>
                 <input type="text" name="grade" maxlength="5" value="{{ old('grade') }}" class="mt-input" style="width:100%" required>
             </div>
-            <label class="mt-chip">
+            <label class="mt-chip" style="margin-left:auto">
                 <input type="checkbox" name="is_passing" value="1" @checked(old('is_passing', true))>
                 <span>Passing grade</span>
             </label>

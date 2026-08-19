@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\LeaveController as AdminLeave;
 use App\Http\Controllers\Parent\LeaveController as ParentLeave;
 use App\Http\Controllers\Teacher\MyLeaveController as TeacherMyLeave;
 use App\Http\Controllers\Admin\StaffLeaveController as AdminStaffLeave;
+use App\Http\Controllers\Teacher\StudentController as TeacherStudent;
 
 // Root: send guests to login, and already-authenticated users straight to
 // their dashboard. This must NOT sit behind the `guest` middleware — Laravel's
@@ -102,6 +103,9 @@ Route::middleware(['auth', 'teacher'])
     ->name('teacher.')
     ->group(function () {
         Route::get('/dashboard', [TeacherDash::class, 'index'])->name('dashboard');
+        Route::get('/students/create', [TeacherStudent::class, 'create'])->name('students.create');
+        Route::post('/students', [TeacherStudent::class, 'store'])->name('students.store');
+        Route::post('/students/import', [TeacherStudent::class, 'import'])->name('students.import');
         Route::get('/attendance', [TeacherAttendance::class, 'index'])->name('attendance.index');
         Route::post('/attendance', [TeacherAttendance::class, 'store'])->name('attendance.store');
         Route::get('/attendance/history', [TeacherAttendance::class, 'history'])->name('attendance.history');
