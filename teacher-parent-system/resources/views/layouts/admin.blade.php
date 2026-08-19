@@ -75,6 +75,15 @@
                 <span class="app-sidebar-text">Leave Requests</span>
             </a>
 
+            @php($pendingStaffLeaveCount = \App\Models\TeacherLeaveRequest::where('status', 'pending')->count())
+            <a href="{{ route('admin.staff-leaves.index') }}" title="Staff Leave{{ $pendingStaffLeaveCount ? ' ('.$pendingStaffLeaveCount.' pending)' : '' }}"
+               class="app-sidebar-link {{ request()->routeIs('admin.staff-leaves.*') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white' }}">
+                <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 13.25a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM5.75 19.25c.8-2.56 3.08-4.25 6.25-4.25s5.45 1.69 6.25 4.25M17.25 6.75l2 2 3.5-3.5" />
+                </svg>
+                <span class="app-sidebar-text">Staff Leave @if($pendingStaffLeaveCount)<span class="ml-1 rounded-full bg-rose-500 px-1.5 py-0.5 text-[10px] text-white">{{ $pendingStaffLeaveCount }}</span>@endif</span>
+            </a>
+
             <a href="{{ route('admin.homework.index') }}" title="Homework"
                class="app-sidebar-link {{ request()->routeIs('admin.homework.*') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white' }}">
                 <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">

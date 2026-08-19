@@ -25,6 +25,8 @@ use App\Http\Controllers\Parent\ResultController as ParentResult;
 use App\Http\Controllers\Teacher\LeaveController as TeacherLeave;
 use App\Http\Controllers\Admin\LeaveController as AdminLeave;
 use App\Http\Controllers\Parent\LeaveController as ParentLeave;
+use App\Http\Controllers\Teacher\MyLeaveController as TeacherMyLeave;
+use App\Http\Controllers\Admin\StaffLeaveController as AdminStaffLeave;
 
 // Root: send guests to login, and already-authenticated users straight to
 // their dashboard. This must NOT sit behind the `guest` middleware — Laravel's
@@ -70,6 +72,9 @@ Route::middleware(['auth', 'admin'])
         Route::get('/attendance/history', [AdminAttendance::class, 'history'])->name('attendance.history');
         Route::get('/leaves', [AdminLeave::class, 'index'])->name('leaves.index');
         Route::get('/leaves/{leaveRequest}', [AdminLeave::class, 'show'])->name('leaves.show');
+        Route::get('/staff-leaves', [AdminStaffLeave::class, 'index'])->name('staff-leaves.index');
+        Route::get('/staff-leaves/{teacherLeaveRequest}', [AdminStaffLeave::class, 'show'])->name('staff-leaves.show');
+        Route::put('/staff-leaves/{teacherLeaveRequest}/review', [AdminStaffLeave::class, 'review'])->name('staff-leaves.review');
         Route::get('/messages', [AdminMessage::class, 'index'])->name('messages.index');
         Route::post('/messages', [AdminMessage::class, 'store'])->name('messages.store');
         Route::get('/messages/{message}', [AdminMessage::class, 'show'])->name('messages.show');
@@ -102,6 +107,12 @@ Route::middleware(['auth', 'teacher'])
         Route::get('/leaves', [TeacherLeave::class, 'index'])->name('leaves.index');
         Route::get('/leaves/{leaveRequest}', [TeacherLeave::class, 'show'])->name('leaves.show');
         Route::put('/leaves/{leaveRequest}/review', [TeacherLeave::class, 'review'])->name('leaves.review');
+        Route::get('/my-leave', [TeacherMyLeave::class, 'index'])->name('my-leave.index');
+        Route::get('/my-leave/create', [TeacherMyLeave::class, 'create'])->name('my-leave.create');
+        Route::post('/my-leave', [TeacherMyLeave::class, 'store'])->name('my-leave.store');
+        Route::get('/my-leave/{teacherLeaveRequest}/edit', [TeacherMyLeave::class, 'edit'])->name('my-leave.edit');
+        Route::put('/my-leave/{teacherLeaveRequest}', [TeacherMyLeave::class, 'update'])->name('my-leave.update');
+        Route::delete('/my-leave/{teacherLeaveRequest}', [TeacherMyLeave::class, 'destroy'])->name('my-leave.destroy');
         Route::get('/profile', [TeacherProfile::class, 'show'])->name('profile');
         Route::put('/profile', [TeacherProfile::class, 'update'])->name('profile.update');
         Route::put('/profile/password', [TeacherProfile::class, 'updatePassword'])->name('profile.password');

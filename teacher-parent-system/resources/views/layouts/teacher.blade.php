@@ -68,6 +68,14 @@
                 <span class="app-sidebar-text">Leave Requests @if($pendingLeaveCount)<span class="ml-1 rounded-full bg-rose-500 px-1.5 py-0.5 text-[10px] text-white">{{ $pendingLeaveCount }}</span>@endif</span>
             </a>
 
+            <a href="{{ route('teacher.my-leave.index') }}" title="My Leave"
+               class="app-sidebar-link {{ request()->routeIs('teacher.my-leave.*') ? 'bg-teal-700 text-white' : 'text-teal-200 hover:bg-teal-800 hover:text-white' }}">
+                <svg class="app-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 13.25a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM5.75 19.25c.8-2.56 3.08-4.25 6.25-4.25s5.45 1.69 6.25 4.25M17.25 6.75l2 2 3.5-3.5" />
+                </svg>
+                <span class="app-sidebar-text">My Leave</span>
+            </a>
+
             @php($toGradeCount = \App\Models\HomeworkSubmission::whereHas('homework', fn ($q) => $q->where('teacher_id', auth()->id()))->whereNotNull('submitted_at')->whereNull('graded_at')->count())
             <a href="{{ route('teacher.homework.index') }}" title="Homework{{ $toGradeCount ? ' ('.$toGradeCount.' to grade)' : '' }}"
                class="app-sidebar-link {{ request()->routeIs('teacher.homework.*') ? 'bg-teal-700 text-white' : 'text-teal-200 hover:bg-teal-800 hover:text-white' }}">

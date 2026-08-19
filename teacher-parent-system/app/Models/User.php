@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Attendance::class, 'marked_by');
     }
+
+    public function teacherLeaveRequests()
+    {
+        return $this->hasMany(TeacherLeaveRequest::class, 'teacher_id');
+    }
 }
