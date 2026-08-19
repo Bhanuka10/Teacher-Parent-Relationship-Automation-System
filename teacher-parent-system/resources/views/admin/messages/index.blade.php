@@ -6,7 +6,7 @@
     <h1 class="msg-title">Messages</h1>
     <p class="msg-sub">Send separate notices to <span>teachers or students</span>, school-wide or for selected classes.</p>
 
-    <div class="grid gap-6 min-[1360px]:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+    <div class="grid items-start gap-6 min-[1360px]:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
 
         {{-- ═══════════ COMPOSE ═══════════ --}}
         <section class="msg-card overflow-hidden">

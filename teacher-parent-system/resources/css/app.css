@@ -11,10 +11,17 @@
 
 @layer components {
 
-    /* ── Sidebar ── */
+    /* ── Sidebar ──
+       position: fixed (not sticky) — a sticky element with height:100vh
+       leaves a gap below it once the page's total scrollable height gets
+       close to one viewport height (the sticky "release" math falls short
+       of the viewport's actual bottom edge by a few dozen px in that case).
+       Fixed positioning always covers the full viewport regardless of
+       scroll or page length; `main` gets a matching margin-left instead. */
     .app-sidebar {
-        position: sticky;
+        position: fixed;
         top: 0;
+        left: 0;
         height: 100vh;
         flex-shrink: 0;
         z-index: 30;
@@ -29,6 +36,7 @@
     .app-sidebar+main {
         flex: 1;
         min-width: 0;
+        margin-left: 15rem;
     }
 
     /* ── Header ── */
@@ -116,19 +124,29 @@
     }
 
     /* ── Sidebar: responsive ──
-       The sidebar is fixed-width and sticky, which quietly eats into the
-       content area on any page with its own breakpoints (e.g. the messages
-       two-column layout). Below 1180px it narrows; below 900px it collapses
-       to an icon rail; below 640px it becomes a horizontal scrollable bar. */
+       The sidebar is fixed-width and fixed-position, which quietly eats into
+       the content area on any page with its own breakpoints (e.g. the
+       messages two-column layout) — `main`'s margin-left is kept in sync
+       with the sidebar's width at each step. Below 1180px it narrows; below
+       900px it collapses to an icon rail; below 640px it becomes a
+       horizontal scrollable bar (and stops being fixed — see below). */
     @media (max-width: 1180px) {
         .app-sidebar {
             width: 12rem;
+        }
+
+        .app-sidebar+main {
+            margin-left: 12rem;
         }
     }
 
     @media (max-width: 900px) {
         .app-sidebar {
             width: 4.75rem;
+        }
+
+        .app-sidebar+main {
+            margin-left: 4.75rem;
         }
 
         .app-sidebar-header {
@@ -164,11 +182,16 @@
         .app-sidebar {
             position: sticky;
             top: 0;
+            left: auto;
             width: 100%;
             height: auto;
             flex-direction: row;
             align-items: center;
             z-index: 40;
+        }
+
+        .app-sidebar+main {
+            margin-left: 0;
         }
 
         .app-sidebar-header {
