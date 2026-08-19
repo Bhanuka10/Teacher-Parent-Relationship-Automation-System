@@ -239,6 +239,33 @@
             </form>
         </div>
 
+        {{-- ── download attendance sheet ── --}}
+        <div class="toolbar-card" style="border-color:#99f6e4;background:linear-gradient(180deg,#f0fdfa,#fff)">
+            <form method="GET" action="{{ route('teacher.attendance.export') }}" class="flex flex-wrap items-end gap-3 w-full">
+                <div class="toolbar-field">
+                    <label style="color:var(--t-accent-mid)">
+                        <svg style="width:11px;height:11px;display:inline;vertical-align:-1px;margin-right:3px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                        Download attendance sheet
+                    </label>
+                </div>
+                <div class="toolbar-field">
+                    <label for="export-from">From</label>
+                    <input type="date" id="export-from" name="from" value="{{ $exportFrom }}" class="att-input">
+                </div>
+                <div class="toolbar-field">
+                    <label for="export-to">To</label>
+                    <input type="date" id="export-to" name="to" value="{{ $exportTo }}" class="att-input">
+                </div>
+                <div class="toolbar-actions">
+                    <button type="submit" class="qa-btn primary">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                        Download CSV
+                    </button>
+                </div>
+            </form>
+            <p class="mt-2 w-full text-xs" style="color:#6b7280">Leave both dates blank to download the full history. Opens in Excel, Sheets or Numbers.</p>
+        </div>
+
         @if($filterDate)
             <div class="due-banner">
                 <span>Need to make a correction? You can edit the attendance marked for <strong>{{ $filterDate }}</strong>.</span>

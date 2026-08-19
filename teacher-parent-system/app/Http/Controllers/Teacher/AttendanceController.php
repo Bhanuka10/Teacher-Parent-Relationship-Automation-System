@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class AttendanceController extends Controller
 {
@@ -98,6 +99,8 @@ class AttendanceController extends Controller
                 'schoolClass' => null,
                 'records' => collect(),
                 'filterDate' => $filterDate,
+                'exportFrom' => $request->query('from'),
+                'exportTo' => $request->query('to'),
             ]);
         }
 
@@ -110,6 +113,58 @@ class AttendanceController extends Controller
             ->orderBy('student_id')
             ->get();
 
-        return view('teacher.attendance.history', compact('schoolClass', 'records', 'filterDate'));
+        return view('teacher.attendance.history', [
+            'schoolClass' => $schoolClass,
+            'records' => $records,
+            'filterDate' => $filterDate,
+            'exportFrom' => $request->query('from'),
+            'exportTo' => $request->query('to'),
+        ]);
+    }
+
+    public function export(Request $request)
+    {
+        $validated = $request->validate([
+            'from' => ['nullable', 'date'],
+            'to' => ['nullable', 'date', 'after_or_equal:from'],
+        ]);
+
+        $teacher = auth()->user();
+        $schoolClass = $teacher->schoolClass()->with(['students.profile'])->first();
+
+        abort_unless($schoolClass, 404, 'No class is assigned to this teacher.');
+
+        $records = Attendance::with(['student.profile', 'student.schoolClass', 'markedBy'])
+            ->whereIn('student_id', $schoolClass->students->pluck('id'))
+            ->when($validated['from'] ?? null, fn ($q, $from) => $q->whereDate('date', '>=', $from))
+            ->when($validated['to'] ?? null, fn ($q, $to) => $q->whereDate('date', '<=', $to))
+            ->orderBy('date')
+            ->orderBy('student_id')
+            ->get();
+
+        return $this->streamCsv($records, 'attendance-'.Str::slug($schoolClass->name));
+    }
+
+    private function streamCsv($records, string $filenamePrefix)
+    {
+        $filename = $filenamePrefix.'-'.now()->format('Ymd-His').'.csv';
+
+        return response()->streamDownload(function () use ($records) {
+            $handle = fopen('php://output', 'w');
+            fputcsv($handle, ['Date', 'Student', 'Index No.', 'Class', 'Status', 'Marked By']);
+
+            foreach ($records as $record) {
+                fputcsv($handle, [
+                    $record->date->format('Y-m-d'),
+                    $record->student->name ?? '',
+                    $record->student->profile?->index_number ?? $record->student->admission_number ?? '',
+                    $record->student->schoolClass?->name ?? '',
+                    $record->status === 'leave' ? 'On Leave' : ucfirst($record->status),
+                    $record->markedBy?->name ?? '',
+                ]);
+            }
+
+            fclose($handle);
+        }, $filename, ['Content-Type' => 'text/csv']);
     }
 }

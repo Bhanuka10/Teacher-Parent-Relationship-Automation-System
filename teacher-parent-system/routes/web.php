@@ -70,6 +70,7 @@ Route::middleware(['auth', 'admin'])
     ->group(function () {
         Route::get('/dashboard', [AdminDash::class, 'index'])->name('dashboard');
         Route::get('/attendance/history', [AdminAttendance::class, 'history'])->name('attendance.history');
+        Route::get('/attendance/export', [AdminAttendance::class, 'export'])->name('attendance.export');
         Route::get('/leaves', [AdminLeave::class, 'index'])->name('leaves.index');
         Route::get('/leaves/{leaveRequest}', [AdminLeave::class, 'show'])->name('leaves.show');
         Route::get('/staff-leaves', [AdminStaffLeave::class, 'index'])->name('staff-leaves.index');
@@ -104,6 +105,7 @@ Route::middleware(['auth', 'teacher'])
         Route::get('/attendance', [TeacherAttendance::class, 'index'])->name('attendance.index');
         Route::post('/attendance', [TeacherAttendance::class, 'store'])->name('attendance.store');
         Route::get('/attendance/history', [TeacherAttendance::class, 'history'])->name('attendance.history');
+        Route::get('/attendance/export', [TeacherAttendance::class, 'export'])->name('attendance.export');
         Route::get('/leaves', [TeacherLeave::class, 'index'])->name('leaves.index');
         Route::get('/leaves/{leaveRequest}', [TeacherLeave::class, 'show'])->name('leaves.show');
         Route::put('/leaves/{leaveRequest}/review', [TeacherLeave::class, 'review'])->name('leaves.review');
