@@ -13,6 +13,7 @@ class HomeworkController extends Controller
     {
         $classId = $request->query('class_id');
         $type = $request->query('type');
+        $search = trim((string) $request->query('search', ''));
 
         $query = Homework::with(['schoolClass', 'teacher'])
             ->withCount([
@@ -22,12 +23,21 @@ class HomeworkController extends Controller
             ])
             ->when($classId, fn ($q) => $q->where('school_class_id', $classId))
             ->when($type, fn ($q) => $q->where('type', $type))
+            ->when($search !== '', fn ($q) => $q->where('title', 'like', '%'.$search.'%'))
             ->latest();
 
         $homeworks = $query->paginate(12)->withQueryString();
         $classes = SchoolClass::orderBy('name')->get(['id', 'name']);
 
-        return view('admin.homework.index', compact('homeworks', 'classes', 'classId', 'type'));
+        $counts = [
+            'total' => Homework::count(),
+            'quizzes' => Homework::where('type', 'quiz')->count(),
+            'files' => Homework::where('type', 'file')->count(),
+        ];
+
+        $searchOptions = Homework::orderBy('title')->pluck('title')->unique()->values();
+
+        return view('admin.homework.index', compact('homeworks', 'classes', 'classId', 'type', 'search', 'counts', 'searchOptions'));
     }
 
     public function show(Homework $homework)

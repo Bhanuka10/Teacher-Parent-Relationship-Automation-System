@@ -14,15 +14,23 @@ class AttendanceController extends Controller
         $grade = $request->query('grade');
         $section = $request->query('section');
         $date = $request->query('date');
+        $search = trim((string) $request->query('search', ''));
 
-        $query = $this->filteredQuery($grade, $section, $date)
+        $query = $this->filteredQuery($grade, $section, $date, null, null, $search)
             ->orderByDesc('date')
             ->orderBy('student_id');
 
         $total   = $query->count();
         $records = $query->paginate(10)->withQueryString();
 
-        return view('admin.attendance.history', compact('records', 'grade', 'section', 'date', 'total'));
+        $counts = [
+            'total' => Attendance::count(),
+            'present_today' => Attendance::whereDate('date', now()->toDateString())->where('status', 'present')->count(),
+            'absent_today' => Attendance::whereDate('date', now()->toDateString())->where('status', 'absent')->count(),
+            'leave_today' => Attendance::whereDate('date', now()->toDateString())->where('status', 'leave')->count(),
+        ];
+
+        return view('admin.attendance.history', compact('records', 'grade', 'section', 'date', 'search', 'total', 'counts'));
     }
 
     public function export(Request $request)
@@ -34,8 +42,9 @@ class AttendanceController extends Controller
 
         $grade = $request->query('grade');
         $section = $request->query('section');
+        $search = trim((string) $request->query('search', ''));
 
-        $records = $this->filteredQuery($grade, $section, null, $validated['from'] ?? null, $validated['to'] ?? null)
+        $records = $this->filteredQuery($grade, $section, null, $validated['from'] ?? null, $validated['to'] ?? null, $search)
             ->orderBy('date')
             ->orderBy('student_id')
             ->get();
@@ -61,7 +70,7 @@ class AttendanceController extends Controller
         }, $filename, ['Content-Type' => 'text/csv']);
     }
 
-    private function filteredQuery(?string $grade, ?string $section, ?string $date, ?string $from = null, ?string $to = null): Builder
+    private function filteredQuery(?string $grade, ?string $section, ?string $date, ?string $from = null, ?string $to = null, ?string $search = null): Builder
     {
         return Attendance::with([
                 'student.profile',
@@ -89,6 +98,12 @@ class AttendanceController extends Controller
                     if ($section) {
                         $classQuery->where('name', 'like', '%-'.$section);
                     }
+                });
+            })
+            ->when($search, function ($q) use ($search) {
+                $q->whereHas('student', function ($studentQuery) use ($search) {
+                    $studentQuery->where('name', 'like', '%'.$search.'%')
+                        ->orWhere('admission_number', 'like', '%'.$search.'%');
                 });
             });
     }

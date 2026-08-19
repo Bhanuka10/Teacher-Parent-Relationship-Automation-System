@@ -18,16 +18,38 @@ class LeaveController extends Controller
             $status = null;
         }
 
+        $search = trim((string) $request->query('search', ''));
+
         $leaveRequests = LeaveRequest::with(['student', 'schoolClass', 'requestedBy', 'reviewedBy'])
             ->when($classId, fn ($q) => $q->where('school_class_id', $classId))
             ->when($status, fn ($q) => $q->where('status', $status))
+            ->when($search !== '', function ($q) use ($search) {
+                $q->whereHas('student', function ($studentQuery) use ($search) {
+                    $studentQuery->where('name', 'like', '%'.$search.'%')
+                        ->orWhere('admission_number', 'like', '%'.$search.'%');
+                });
+            })
             ->latest()
             ->paginate(15)
             ->withQueryString();
 
         $classes = SchoolClass::orderBy('name')->get(['id', 'name']);
 
-        return view('admin.leaves.index', compact('leaveRequests', 'classes', 'classId', 'status'));
+        $counts = [
+            'total' => LeaveRequest::count(),
+            'pending' => LeaveRequest::where('status', 'pending')->count(),
+            'approved' => LeaveRequest::where('status', 'approved')->count(),
+            'rejected' => LeaveRequest::where('status', 'rejected')->count(),
+        ];
+
+        $searchOptions = LeaveRequest::with('student:id,name,admission_number')
+            ->get()
+            ->pluck('student.name')
+            ->filter()
+            ->unique()
+            ->values();
+
+        return view('admin.leaves.index', compact('leaveRequests', 'classes', 'classId', 'status', 'search', 'counts', 'searchOptions'));
     }
 
     public function show(LeaveRequest $leaveRequest)
