@@ -3,124 +3,142 @@
 
 @push('styles')
 <style>
-    /* ── Page header date card ── */
-    .ah-header-card {
-        display: inline-flex;
-        align-items: center;
-        gap: 14px;
+    /* ── Shared tokens ── */
+    :root {
+        --accent: #7c3aed;
+        --accent-light: #ede9fe;
+        --accent-mid: #4f46e5;
+    }
+
+    /* ── Page header row ── */
+    .mt-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+    .mt-title   { font-size: 22px; font-weight: 800; color: #111827; margin: 0; }
+    .mt-sub     { font-size: 13px; color: #6b7280; margin: 4px 0 24px; }
+    .mt-sub span { color: var(--accent); font-weight: 600; }
+
+    /* ── Stats card ── */
+    .stats-strip {
+        display: flex; gap: 16px; flex-wrap: wrap;
+        margin-bottom: 24px;
+    }
+    .stat-card {
         background: #fff;
         border: 1px solid #e5e7eb;
         border-radius: 12px;
-        padding: 12px 20px;
-        margin-bottom: 28px;
-        box-shadow: 0 1px 3px rgba(0,0,0,.05);
+        padding: 14px 22px;
+        box-shadow: 0 1px 3px rgba(0,0,0,.04);
+        display: flex; align-items: center; gap: 14px;
     }
-    .ah-header-card .icon-wrap {
-        width: 42px; height: 42px;
-        background: #ede9fe;
+    .stat-icon {
+        width: 40px; height: 40px;
         border-radius: 10px;
         display: flex; align-items: center; justify-content: center;
         flex-shrink: 0;
     }
-    .ah-header-card .icon-wrap svg { color: #7c3aed; }
-    .ah-header-card .lbl {
-        font-size: 10px; font-weight: 700;
-        letter-spacing: .08em; text-transform: uppercase;
-        color: #7c3aed; margin-bottom: 2px;
-    }
-    .ah-header-card .date-text {
-        font-size: 15px; font-weight: 700; color: #1f2937;
-    }
+    .stat-icon.purple { background: var(--accent-light); color: var(--accent); }
+    .stat-icon.teal   { background: #ccfbf1; color: #0f766e; }
+    .stat-icon.amber  { background: #fef3c7; color: #b45309; }
+    .stat-icon.rose   { background: #fee2e2; color: #991b1b; }
+    .stat-value { font-size: 20px; font-weight: 800; color: #111827; line-height: 1.1; }
+    .stat-label { font-size: 11px; color: #6b7280; margin-top: 2px; }
 
-    /* ── Filter panel ── */
-    .ah-filter-panel {
+    /* ── Search / filter bar ── */
+    .mt-filter-bar {
         background: #fff;
         border: 1px solid #e5e7eb;
         border-radius: 14px;
-        padding: 24px 24px 20px;
+        padding: 18px 20px;
         margin-bottom: 24px;
         box-shadow: 0 1px 4px rgba(0,0,0,.04);
     }
-    .ah-filter-panel .filter-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 16px;
-        margin-bottom: 18px;
+    .mt-filter-inner {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
     }
-    @media(max-width:768px){ .ah-filter-panel .filter-grid{ grid-template-columns:1fr; } }
-    .ah-filter-panel label {
-        display: block;
-        font-size: 11px; font-weight: 700;
-        letter-spacing: .06em; text-transform: uppercase;
-        color: #6b7280; margin-bottom: 6px;
+    .search-wrap {
+        position: relative;
+        flex: 1;
+        min-width: 200px;
     }
-    .ah-filter-panel select,
-    .ah-filter-panel input[type="date"] {
+    .search-wrap svg {
+        position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+        color: #9ca3af; pointer-events: none;
+    }
+    .search-wrap input {
         width: 100%;
+        padding: 10px 14px 10px 38px;
         border: 1px solid #d1d5db;
-        border-radius: 8px;
-        padding: 10px 36px 10px 14px;
-        font-size: 14px;
-        color: #374151;
-        background-color: #fff;
+        border-radius: 9px;
+        font-size: 13px; color: #374151;
         transition: border-color .15s, box-shadow .15s;
-        appearance: none;
-        -webkit-appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 12px center;
         box-sizing: border-box;
     }
-    .ah-filter-panel input[type="date"] {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
-        color: #9ca3af;
-    }
-    .ah-filter-panel select:focus,
-    .ah-filter-panel input[type="date"]:focus {
+    .search-wrap input:focus {
         outline: none;
-        border-color: #7c3aed;
+        border-color: var(--accent);
         box-shadow: 0 0 0 3px rgba(124,58,237,.12);
-        color: #374151;
     }
-    .ah-filter-actions { display: flex; justify-content: flex-end; gap: 10px; }
+    .search-wrap input::placeholder { color: #9ca3af; }
+    .status-select, .mt-filter-inner input[type="date"] {
+        padding: 10px 14px;
+        border: 1px solid #d1d5db;
+        border-radius: 9px;
+        font-size: 13px; color: #374151;
+        background: #fff;
+        min-width: 150px;
+    }
+    .status-select:focus, .mt-filter-inner input[type="date"]:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(124,58,237,.12);
+    }
+    .btn-search {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 10px 18px; border-radius: 9px;
+        font-size: 13px; font-weight: 600;
+        background: var(--accent-mid); color: #fff;
+        border: none; cursor: pointer;
+        transition: background .15s;
+        white-space: nowrap;
+    }
+    .btn-search:hover { background: #4338ca; }
+    .btn-reset-sm {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 10px 16px; border-radius: 9px;
+        font-size: 13px; font-weight: 600;
+        background: #fff; color: #374151;
+        border: 1px solid #e5e7eb;
+        text-decoration: none;
+        transition: background .15s;
+        white-space: nowrap;
+    }
+    .btn-reset-sm:hover { background: #f9fafb; }
 
+    /* ── Export panel ── */
+    .export-panel {
+        border-color: #ddd6fe;
+        background: linear-gradient(180deg, #f5f3ff, #fff);
+    }
     .export-title {
         display: flex; align-items: center; gap: 7px;
         font-size: 13px; font-weight: 700; color: #6d28d9;
         margin-bottom: 14px;
     }
     .export-hint { font-size: 11.5px; color: #9ca3af; margin-top: 10px; }
-    .btn-reset {
-        display: inline-flex; align-items: center; gap: 6px;
-        padding: 9px 18px; border-radius: 8px;
-        font-size: 13px; font-weight: 600;
-        border: 1px solid #e5e7eb;
-        background: #fff; color: #374151;
-        text-decoration: none;
-        transition: background .15s, border-color .15s;
-        cursor: pointer;
-    }
-    .btn-reset:hover { background: #f9fafb; border-color: #d1d5db; }
-    .btn-search {
-        display: inline-flex; align-items: center; gap: 6px;
-        padding: 9px 20px; border-radius: 8px;
-        font-size: 13px; font-weight: 600;
-        background: #4f46e5; color: #fff;
-        border: none; cursor: pointer;
-        transition: background .15s, box-shadow .15s;
-    }
-    .btn-search:hover { background: #4338ca; box-shadow: 0 4px 12px rgba(79,70,229,.3); }
 
     /* ── Table ── */
-    .ah-table-wrap {
+    .mt-table-wrap {
         background: #fff;
         border: 1px solid #e5e7eb;
         border-radius: 14px;
         overflow: hidden;
         box-shadow: 0 1px 4px rgba(0,0,0,.04);
+        overflow-x: auto;
     }
-    .ah-table-wrap table { width: 100%; border-collapse: collapse; }
-    .ah-table-wrap thead th {
+    .mt-table-wrap table { width: 100%; border-collapse: collapse; min-width: 760px; table-layout: fixed; }
+    .mt-table-wrap thead th {
         padding: 12px 18px;
         font-size: 11px; font-weight: 700;
         letter-spacing: .07em; text-transform: uppercase;
@@ -128,46 +146,55 @@
         background: #f9fafb;
         border-bottom: 1px solid #f3f4f6;
         white-space: nowrap;
+        text-align: left;
     }
-    .ah-table-wrap tbody tr {
+    .mt-table-wrap tbody tr {
         border-bottom: 1px solid #f3f4f6;
         transition: background .12s;
     }
-    .ah-table-wrap tbody tr:last-child { border-bottom: none; }
-    .ah-table-wrap tbody tr:hover { background: #fafafa; }
-    .ah-table-wrap tbody td {
+    .mt-table-wrap tbody tr:last-child { border-bottom: none; }
+    .mt-table-wrap tbody tr:hover { background: #fafafa; }
+    .mt-table-wrap tbody td {
         padding: 14px 18px;
         font-size: 13px; color: #374151;
         vertical-align: middle;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
-    .student-cell { display: flex; align-items: center; gap: 10px; }
-    .student-avatar {
-        width: 30px; height: 30px; border-radius: 50%;
+
+    /* Student name cell */
+    .user-cell { display: flex; align-items: center; gap: 10px; }
+    .user-avatar {
+        width: 34px; height: 34px; border-radius: 50%;
         display: flex; align-items: center; justify-content: center;
-        font-size: 12px; font-weight: 700; color: #fff;
+        font-size: 13px; font-weight: 700; color: #fff;
         flex-shrink: 0; text-transform: uppercase;
     }
-    .student-name { font-weight: 600; color: #111827; }
-    .index-no { color: #6b7280; font-size: 13px; }
+    .user-name  { font-weight: 700; color: #111827; font-size: 13px; }
+    .user-email { font-size: 11px; color: #9ca3af; margin-top: 1px; }
+
+    /* Badges */
     .class-badge {
         display: inline-flex; align-items: center;
         background: #f3f4f6; color: #374151;
         border-radius: 6px; padding: 3px 10px;
         font-size: 12px; font-weight: 600;
     }
-    .date-cell { color: #6b7280; white-space: nowrap; }
     .status-badge {
         display: inline-flex; align-items: center; gap: 5px;
-        border-radius: 20px; padding: 4px 12px;
-        font-size: 12px; font-weight: 600;
+        border-radius: 20px; padding: 3px 10px;
+        font-size: 11px; font-weight: 700;
     }
     .status-badge.present { background: #d1fae5; color: #065f46; }
     .status-badge.absent  { background: #fee2e2; color: #991b1b; }
     .status-badge.leave   { background: #fef3c7; color: #92400e; }
-    .status-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
     .status-badge.present .status-dot { background: #10b981; }
     .status-badge.absent  .status-dot { background: #ef4444; }
     .status-badge.leave   .status-dot { background: #d97706; }
+
+    /* Marked-by cell */
     .marked-cell { display: flex; align-items: center; gap: 8px; }
     .marked-avatar {
         width: 26px; height: 26px; border-radius: 50%;
@@ -176,20 +203,19 @@
         font-size: 11px; font-weight: 700;
         flex-shrink: 0; text-transform: uppercase;
     }
-    .action-btn {
-        background: none; border: none; cursor: pointer;
-        color: #9ca3af; padding: 4px 8px; border-radius: 6px;
-        transition: background .12s, color .12s;
-        font-size: 18px; line-height: 1; letter-spacing: 1px;
-    }
-    .action-btn:hover { background: #f3f4f6; color: #374151; }
+
+    /* Empty state */
+    .mt-empty { padding: 56px 24px; text-align: center; color: #9ca3af; }
+    .mt-empty svg { margin: 0 auto 14px; opacity: .3; }
+    .mt-empty p   { font-size: 14px; }
 
     /* ── Pagination footer ── */
     .ah-footer {
         display: flex; align-items: center; justify-content: space-between;
+        flex-wrap: wrap; gap: 10px;
         padding: 14px 18px;
         border-top: 1px solid #f3f4f6;
-        font-size: 13px; color: #6b7280;
+        font-size: 12px; color: #9ca3af;
     }
     .pagination-wrap { display: flex; align-items: center; gap: 4px; }
     .page-btn {
@@ -202,7 +228,7 @@
         transition: background .12s, border-color .12s, color .12s;
     }
     .page-btn:hover:not(.active):not(.disabled) { background: #f9fafb; }
-    .page-btn.active { background: #4f46e5; border-color: #4f46e5; color: #fff; font-weight: 700; }
+    .page-btn.active { background: var(--accent-mid); border-color: var(--accent-mid); color: #fff; font-weight: 700; }
     .page-btn.disabled { pointer-events: none; color: #d1d5db; border-color: transparent; background: none; }
     .page-arrow {
         width: 32px; height: 32px; border-radius: 7px;
@@ -214,94 +240,113 @@
     }
     .page-arrow:hover:not(.disabled) { background: #f3f4f6; }
     .page-arrow.disabled { pointer-events: none; color: #d1d5db; }
-
-    /* ── Empty state ── */
-    .ah-empty { padding: 56px 24px; text-align: center; color: #9ca3af; }
-    .ah-empty svg { margin: 0 auto 12px; opacity: .35; }
-    .ah-empty p { font-size: 14px; }
 </style>
 @endpush
 
 @section('content')
 <div class="max-w-7xl">
 
-    {{-- Page heading --}}
-    <h1 class="text-2xl font-bold text-gray-800 mb-1">Manage Student Records</h1>
-    <p class="text-sm mb-6" style="color:#6b7280">
-        View and manage student attendance records across all classes.
-        Use filters to narrow down
-        <span style="color:#7c3aed;cursor:pointer;font-weight:600">specific sections</span> or
-        <span style="color:#7c3aed;cursor:pointer;font-weight:600">dates</span>.
-    </p>
-
-    {{-- Date card --}}
-    <div class="ah-header-card">
-        <div class="icon-wrap">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
-                 stroke="currentColor" stroke-width="2">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                <line x1="16" y1="2" x2="16" y2="6"/>
-                <line x1="8" y1="2" x2="8" y2="6"/>
-                <line x1="3" y1="10" x2="21" y2="10"/>
-            </svg>
-        </div>
+    {{-- ── Page heading ── --}}
+    <div class="mt-header">
         <div>
-            <div class="lbl">Today</div>
-            <div class="date-text">{{ now()->format('M j, Y') }}</div>
+            <h1 class="mt-title">Attendance History</h1>
+            <p class="mt-sub">
+                View and manage <span>student attendance records</span> across all classes.
+            </p>
         </div>
     </div>
 
-    {{-- Filter Panel --}}
-    <div class="ah-filter-panel">
-        <form method="GET" action="{{ route('admin.attendance.history') }}" id="filter-form">
-            <div class="filter-grid">
-                <div>
-                    <label for="grade-select">Grade</label>
-                    <select name="grade" id="grade-select">
-                        <option value="">All grades</option>
-                        @for($g = 1; $g <= 12; $g++)
-                            <option value="{{ $g }}" {{ (string) $grade === (string) $g ? 'selected' : '' }}>Grade {{ $g }}</option>
-                        @endfor
-                    </select>
-                </div>
-                <div>
-                    <label for="section-select">Section</label>
-                    <select name="section" id="section-select">
-                        <option value="">All sections</option>
-                        @foreach(['A', 'B', 'C', 'D', 'E'] as $sec)
-                            <option value="{{ $sec }}" {{ $section === $sec ? 'selected' : '' }}>{{ $sec }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label for="date-picker">Date</label>
-                    <input type="date" name="date" id="date-picker"
-                           value="{{ $date }}" placeholder="mm/dd/yyyy">
-                </div>
+    {{-- ── Stats cards ── --}}
+    <div class="stats-strip">
+        <div class="stat-card">
+            <div class="stat-icon purple">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
             </div>
-            <div class="ah-filter-actions">
-                <a href="{{ route('admin.attendance.history') }}" class="btn-reset" id="reset-filters-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24"
-                         stroke="currentColor" stroke-width="2.2">
-                        <polyline points="1 4 1 10 7 10"/>
-                        <path d="M3.51 15a9 9 0 1 0 .49-5"/>
+            <div>
+                <div class="stat-value">{{ $counts['total'] }}</div>
+                <div class="stat-label">Total Records</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon teal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+            </div>
+            <div>
+                <div class="stat-value">{{ $counts['present_today'] }}</div>
+                <div class="stat-label">Present Today</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon rose">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </div>
+            <div>
+                <div class="stat-value">{{ $counts['absent_today'] }}</div>
+                <div class="stat-label">Absent Today</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon amber">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                </svg>
+            </div>
+            <div>
+                <div class="stat-value">{{ $counts['leave_today'] }}</div>
+                <div class="stat-label">On Leave Today</div>
+            </div>
+        </div>
+    </div>
+
+    {{-- ── Search / filter bar ── --}}
+    <div class="mt-filter-bar">
+        <form method="GET" action="{{ route('admin.attendance.history') }}" id="filter-form">
+            <div class="mt-filter-inner">
+                <div class="search-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
                     </svg>
-                    Reset Filters
-                </a>
+                    <input type="text" name="search" id="search-input"
+                           value="{{ $search }}"
+                           placeholder="Search by student name or admission no…">
+                </div>
+                <select name="grade" id="grade-select" class="status-select">
+                    <option value="">All grades</option>
+                    @for($g = 1; $g <= 12; $g++)
+                        <option value="{{ $g }}" {{ (string) $grade === (string) $g ? 'selected' : '' }}>Grade {{ $g }}</option>
+                    @endfor
+                </select>
+                <select name="section" id="section-select" class="status-select">
+                    <option value="">All sections</option>
+                    @foreach(['A', 'B', 'C', 'D', 'E'] as $sec)
+                        <option value="{{ $sec }}" {{ $section === $sec ? 'selected' : '' }}>{{ $sec }}</option>
+                    @endforeach
+                </select>
+                <input type="date" name="date" id="date-picker" value="{{ $date }}">
                 <button type="submit" class="btn-search" id="search-records-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24"
-                         stroke="currentColor" stroke-width="2.2">
-                        <circle cx="11" cy="11" r="8"/>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
                     </svg>
-                    Search Records
+                    Search
                 </button>
+                <a href="{{ route('admin.attendance.history') }}" class="btn-reset-sm" id="reset-filters-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                        <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-5"/>
+                    </svg>
+                    Reset
+                </a>
             </div>
         </form>
     </div>
 
-    {{-- Download Panel --}}
-    <div class="ah-filter-panel" style="border-color:#ddd6fe;background:linear-gradient(180deg,#f5f3ff,#fff)">
+    {{-- ── Export panel ── --}}
+    <div class="mt-filter-bar export-panel">
         <div class="export-title">
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/>
@@ -311,40 +356,35 @@
         <form method="GET" action="{{ route('admin.attendance.export') }}">
             <input type="hidden" name="grade" value="{{ $grade }}">
             <input type="hidden" name="section" value="{{ $section }}">
-            <div class="filter-grid" style="grid-template-columns:1fr 1fr auto">
-                <div>
-                    <label for="export-from">From</label>
-                    <input type="date" name="from" id="export-from">
-                </div>
-                <div>
-                    <label for="export-to">To</label>
-                    <input type="date" name="to" id="export-to">
-                </div>
-                <div style="display:flex;align-items:flex-end">
-                    <button type="submit" class="btn-search" style="width:100%;justify-content:center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/>
-                        </svg>
-                        Download CSV
-                    </button>
-                </div>
+            <input type="hidden" name="search" value="{{ $search }}">
+            <div class="mt-filter-inner">
+                <input type="date" name="from" id="export-from" placeholder="From">
+                <input type="date" name="to" id="export-to" placeholder="To">
+                <button type="submit" class="btn-search">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/>
+                    </svg>
+                    Download CSV
+                </button>
             </div>
         </form>
-        <p class="export-hint">Uses the Grade/Section filter above, if set. Leave both dates blank to download the full history.</p>
+        <p class="export-hint">Uses the Grade/Section/Search filters above, if set. Leave both dates blank to download the full history.</p>
     </div>
 
-    {{-- Table --}}
-    <div class="ah-table-wrap">
-        <table>
+    {{-- ── Table ── --}}
+    <div class="mt-table-wrap">
+        <table id="attendance-table">
+            <colgroup>
+                <col style="width:32%"><col style="width:16%"><col style="width:16%">
+                <col style="width:16%"><col style="width:20%">
+            </colgroup>
             <thead>
                 <tr>
-                    <th>Student Name</th>
-                    <th>Index No.</th>
+                    <th>Student</th>
                     <th>Class</th>
                     <th>Date</th>
                     <th>Status</th>
                     <th>Marked By</th>
-                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -359,16 +399,18 @@
                     @endphp
                     <tr id="record-{{ $record->id }}">
                         <td>
-                            <div class="student-cell">
-                                <div class="student-avatar" style="background:{{ $avatarColor }}">
+                            <div class="user-cell">
+                                <div class="user-avatar" style="background:{{ $avatarColor }}">
                                     {{ strtoupper(substr($student?->name ?? '?', 0, 1)) }}
                                 </div>
-                                <span class="student-name">{{ $student?->name ?? '-' }}</span>
+                                <div>
+                                    <div class="user-name">{{ $student?->name ?? '-' }}</div>
+                                    <div class="user-email">{{ $indexNumber }}</div>
+                                </div>
                             </div>
                         </td>
-                        <td class="index-no">{{ $indexNumber }}</td>
                         <td><span class="class-badge">{{ $className }}</span></td>
-                        <td class="date-cell">{{ $record->date->format('M j, Y') }}</td>
+                        <td>{{ $record->date->format('M j, Y') }}</td>
                         <td>
                             <span class="status-badge {{ $record->status }}">
                                 <span class="status-dot"></span>
@@ -385,18 +427,13 @@
                                 <span style="color:#d1d5db">&mdash;</span>
                             @endif
                         </td>
-                        <td>
-                            <button class="action-btn" title="More actions" id="action-btn-{{ $record->id }}">&#8942;</button>
-                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7">
-                            <div class="ah-empty">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none"
-                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <line x1="8" y1="12" x2="16" y2="12"/>
+                        <td colspan="5">
+                            <div class="mt-empty">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                                    <circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/>
                                 </svg>
                                 <p>No attendance records found for the selected filters.</p>
                             </div>
