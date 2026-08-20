@@ -16,8 +16,10 @@ class LeaveController extends Controller
         $teacher = auth()->user();
         $schoolClass = $teacher->schoolClass;
 
+        $emptyCounts = ['pending' => 0, 'approved' => 0, 'rejected' => 0, 'total' => 0];
+
         if (!$schoolClass) {
-            return view('teacher.leaves.index', ['schoolClass' => null, 'leaveRequests' => collect(), 'status' => null]);
+            return view('teacher.leaves.index', ['schoolClass' => null, 'leaveRequests' => collect(), 'status' => null, 'counts' => $emptyCounts]);
         }
 
         $status = $request->query('status');
@@ -32,7 +34,19 @@ class LeaveController extends Controller
             ->latest()
             ->get();
 
-        return view('teacher.leaves.index', compact('schoolClass', 'leaveRequests', 'status'));
+        $statusCounts = LeaveRequest::where('school_class_id', $schoolClass->id)
+            ->selectRaw('status, count(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status');
+
+        $counts = [
+            'pending'  => (int) ($statusCounts['pending'] ?? 0),
+            'approved' => (int) ($statusCounts['approved'] ?? 0),
+            'rejected' => (int) ($statusCounts['rejected'] ?? 0),
+        ];
+        $counts['total'] = array_sum($counts);
+
+        return view('teacher.leaves.index', compact('schoolClass', 'leaveRequests', 'status', 'counts'));
     }
 
     public function show(LeaveRequest $leaveRequest)
