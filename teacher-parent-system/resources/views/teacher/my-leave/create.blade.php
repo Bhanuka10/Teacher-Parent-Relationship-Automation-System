@@ -17,7 +17,7 @@
         Back to my leave
     </a>
 
-    <h1 class="db-title">Request leave</h1>
+    <h1 class="db-title">Request leave</h1> // Request leave
     <p class="db-sub">Submit a date range and reason — the admin will review it.</p>
 
     <form method="POST" action="{{ route('teacher.my-leave.store') }}" class="mt-6">
