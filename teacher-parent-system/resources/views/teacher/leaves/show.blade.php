@@ -1,6 +1,13 @@
 @extends('layouts.teacher')
 @section('title', 'Leave Request')
 
+@push('styles')
+<style>
+    .ui-back.lr-back { color: #0f766e; }
+    .ui-back.lr-back:hover { color: #0d5f58; }
+</style>
+@endpush
+
 @section('content')
 @php
     $statusClass = match($leaveRequest->status) {
@@ -10,7 +17,7 @@
     };
 @endphp
 <div class="mx-auto max-w-2xl">
-    <a href="{{ route('teacher.leaves.index') }}" class="ui-back">
+    <a href="{{ route('teacher.leaves.index') }}" class="ui-back lr-back">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
         Back to leave requests
     </a>

@@ -15,7 +15,19 @@ class MyLeaveController extends Controller
             ->latest()
             ->get();
 
-        return view('teacher.my-leave.index', compact('leaveRequests'));
+        $statusCounts = TeacherLeaveRequest::where('teacher_id', auth()->id())
+            ->selectRaw('status, count(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status');
+
+        $counts = [
+            'pending'  => (int) ($statusCounts['pending'] ?? 0),
+            'approved' => (int) ($statusCounts['approved'] ?? 0),
+            'rejected' => (int) ($statusCounts['rejected'] ?? 0),
+        ];
+        $counts['total'] = array_sum($counts);
+
+        return view('teacher.my-leave.index', compact('leaveRequests', 'counts'));
     }
 
     public function create()
