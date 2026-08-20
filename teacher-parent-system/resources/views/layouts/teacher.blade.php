@@ -137,6 +137,22 @@
             </div>
         @endif
 
+        @if(session('import_errors') && count(session('import_errors')))
+            <div class="flash-warning">
+                <svg style="width:15px;height:15px;flex-shrink:0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                </svg>
+                <div>
+                    <p class="font-semibold mb-1">Some rows were skipped:</p>
+                    <ul class="list-disc list-inside space-y-0.5">
+                        @foreach(session('import_errors') as $importError)
+                            <li>{{ $importError }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+
         @yield('content')
     </main>
 

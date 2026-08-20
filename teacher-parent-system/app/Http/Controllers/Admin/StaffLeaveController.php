@@ -16,13 +16,35 @@ class StaffLeaveController extends Controller
             $status = null;
         }
 
+        $search = trim((string) $request->query('search', ''));
+
         $leaveRequests = TeacherLeaveRequest::with('teacher')
             ->when($status, fn ($q) => $q->where('status', $status))
+            ->when($search !== '', function ($q) use ($search) {
+                $q->whereHas('teacher', function ($teacherQuery) use ($search) {
+                    $teacherQuery->where('name', 'like', '%'.$search.'%')
+                        ->orWhere('email', 'like', '%'.$search.'%');
+                });
+            })
             ->orderByRaw("status = 'pending' desc")
             ->latest()
             ->get();
 
-        return view('admin.staff-leaves.index', compact('leaveRequests', 'status'));
+        $counts = [
+            'total' => TeacherLeaveRequest::count(),
+            'pending' => TeacherLeaveRequest::where('status', 'pending')->count(),
+            'approved' => TeacherLeaveRequest::where('status', 'approved')->count(),
+            'rejected' => TeacherLeaveRequest::where('status', 'rejected')->count(),
+        ];
+
+        $searchOptions = TeacherLeaveRequest::with('teacher:id,name')
+            ->get()
+            ->pluck('teacher.name')
+            ->filter()
+            ->unique()
+            ->values();
+
+        return view('admin.staff-leaves.index', compact('leaveRequests', 'status', 'search', 'counts', 'searchOptions'));
     }
 
     public function show(TeacherLeaveRequest $teacherLeaveRequest)
