@@ -34,13 +34,15 @@
     .qa-btn.ghost-rose { background: #fff; color: #be123c; border-color: #fecdd3; }
     .qa-btn.ghost-rose:hover { background: #ffe4e6; border-color: #fda4af; }
 
-    /* ── KPI stat cards ── */
+    /* ── KPI stat cards (always 4: Students/Subjects/Fully Graded/Class Average) ── */
     .kpi-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        grid-template-columns: repeat(4, 1fr);
         gap: 16px;
         margin-bottom: 24px;
     }
+    @media (max-width: 700px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 420px) { .kpi-grid { grid-template-columns: 1fr; } }
     .kpi-card {
         background: #fff; border: 1px solid #e5e7eb; border-radius: 14px;
         padding: 20px 22px; box-shadow: 0 1px 4px rgba(0,0,0,.04);
