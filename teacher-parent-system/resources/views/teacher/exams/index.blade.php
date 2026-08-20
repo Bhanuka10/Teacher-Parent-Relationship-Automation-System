@@ -32,13 +32,15 @@
     .qa-btn.ghost { background: #fff; color: var(--t-accent); border-color: #d1fae5; }
     .qa-btn.ghost:hover { background: var(--t-accent-light); border-color: var(--t-accent-mid); }
 
-    /* ── KPI stat cards ── */
+    /* ── KPI stat cards (always 4: Total/Subjects/Upcoming/Completed) ── */
     .kpi-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        grid-template-columns: repeat(4, 1fr);
         gap: 16px;
         margin-bottom: 24px;
     }
+    @media (max-width: 700px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 420px) { .kpi-grid { grid-template-columns: 1fr; } }
     .kpi-card {
         background: #fff; border: 1px solid #e5e7eb; border-radius: 14px;
         padding: 20px 22px; box-shadow: 0 1px 4px rgba(0,0,0,.04);
