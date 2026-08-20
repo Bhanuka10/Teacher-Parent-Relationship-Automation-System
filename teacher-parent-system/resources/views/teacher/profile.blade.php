@@ -83,7 +83,7 @@
     $initial = strtoupper(substr($displayName, 0, 1));
 @endphp
 
-<div class="max-w-5xl">
+<div class="max-w-7xl">
 
     {{-- ── Hero ── --}}
     <div class="pf-hero">
